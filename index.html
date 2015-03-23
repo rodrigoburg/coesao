@@ -9,14 +9,36 @@
 
 </style>
 
-<header>
-</header>
+<body>
+<h1>The Wealth & Health of Partidos</h1>
+<div id="partidos">
+    <div class="btn-group" role="group" aria-label="...">
+        <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Partidos para selecionar
+                <span class="caret"></span>
+            </button>
+            <ul id="empNSelecionadas" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            </ul>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Empresas já selecionadas
+                <span class="caret"></span>
+            </button>
+            <ul id="empSelecionadas" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation" data-pos="1"><a role="menuitem" onclick='toggleSelect(this);' class="selecionada glyphicon glyphicon-remove-circle" tabindex="-1" href="#">JBS</a>
+                </li>
+            </ul>
+        </div>
 
-<h1>The Wealth & Health of Nations</h1>
-
+        </div>
+    </div>
+</div>
 <p id="chart"></p>
 
 
 
 <script src="js/d3.v3.min.js"></script>
 <script src="js/main.js"></script>
+</body>
