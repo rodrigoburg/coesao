@@ -6,7 +6,7 @@
 function x(d) { return d.variancia; }
 function y(d) { return d.governismo; }
 function radius(d) { return d.num_deputados; }
-function color(d) { return d.name; }
+function color(d) { return cores[d.name]; }
 function key(d) { return d.name; }
 
 // Chart dimensions.
@@ -17,8 +17,7 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
 // Various scales. These domains make assumptions of data, naturally.
 var xScale = d3.scale.linear().domain([0, 18]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
-    radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 50]),
-    colorScale = d3.scale.category10();
+    radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
 // The x & y axes.
 var xAxis = d3.svg.axis().orient("bottom").scale(xScale),
@@ -35,6 +34,7 @@ var svg = d3.select("#chart").append("svg")
 var periodo = []
 var partidos = []
 var partidos_selecionados = []
+var cores = {}
 
 // tradução do mês
 var traducao_mes = {
@@ -66,6 +66,38 @@ var traducao_mes2 = {
     "11":"nov",
     "12":"dez"
 }
+
+var paleta = {
+    0:'#A11217',
+    1:'#BE003E',
+    2:'#BC005C',
+    3:'#BA007C',
+    4:'#98007F',
+    5:'#7B057E',
+    6:'#5E196F',
+    7:'#45187D',
+    8:'#3A3A8B',
+    9:'#00408F',
+    10:'#00528B',
+    11:'#0066A4',
+    12:'#007CC0',
+    13:'#009BDB',
+    14:'#0096B2',
+    15:'#009493',
+    16:'#008270',
+    17:'#009045',
+    18:'#00602D',
+    19: '#5F8930',
+    20:'#7BAC39',
+    21:'#A3BD31',
+    22:'#CAD226',
+    23:'#FEEE00',
+    24:'#E9BC00',
+    25:'#B6720A',
+    26:'#9A740F',
+    27: '#634600'
+}
+
 
 
 // Add the x-axis.
@@ -109,6 +141,17 @@ d3.json("data/dilma1.json", function(nations) {
     periodo = acha_periodo(nations)
     partidos = acha_partidos(nations)
     partidos_selecionados = partidos
+    //faz um multiplicador que transformará o index de cada partido em um número entre 0 e o total de cores da paleta)
+    var multiplicador = Object.keys(paleta).length/partidos.length
+
+
+    for (p in partidos) {
+        var cor = parseInt(p*multiplicador)
+
+        //após calcular o index novo do partido, adiciona isso numa variável global
+        cores[partidos[p]] = paleta[cor]
+    }
+
 
 // A bisector since many nation's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
@@ -121,7 +164,8 @@ d3.json("data/dilma1.json", function(nations) {
         .enter().append("circle")
         .attr("id", function(d) { return d.name})
         .attr("class", "dot")
-        .style("fill", function(d) { return colorScale(color(d)); })
+        .style("fill", function(d) { return color(d); })
+        .style("stroke", function(d) { return color(d); })
         .call(position)
         .sort(order);
 
@@ -153,7 +197,8 @@ d3.json("data/dilma1.json", function(nations) {
             .attr("r", function(d) { return radiusScale(radius(d)); })
 	    .attr("stroke-width", "7")
 	    .attr("stroke", function(d) { return color(d); })
-	    .attr("stroke-opacity", function(d) { return (7 - x(d))/7 } );
+	    .attr("fill-opacity", function(d) { return (7 - x(d))/7 } )
+        .attr("stroke-opacity", function(d) { return (7 - x(d))/7 } );
     }
 
 // Defines a sort order so that the smallest dots are drawn on top.
