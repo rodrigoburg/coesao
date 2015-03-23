@@ -144,7 +144,10 @@ d3.json("data/dilma1.json", function(nations) {
     function position(dot) {
         dot .attr("cx", function(d) { return xScale(x(d)); })
             .attr("cy", function(d) { return yScale(y(d)); })
-            .attr("r", function(d) { return radiusScale(radius(d)); });
+            .attr("r", function(d) { return radiusScale(radius(d)); })
+	    .attr("stroke-width", "7")
+	    .attr("stroke", function(d) { return color(d); })
+	    .attr("stroke-opacity", function(d) { return (7 - x(d))/7 } );
     }
 
 // Defines a sort order so that the smallest dots are drawn on top.
