@@ -10,12 +10,12 @@ function color(d) { return d.name; }
 function key(d) { return d.name; }
 
 // Chart dimensions.
-var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5},
+var margin = {top: 50, right: 19.5, bottom: 19.5, left: 39.5},
     width = 960 - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, 30]).range([50, width]),
+var xScale = d3.scale.linear().domain([0, 18]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 50]),
     colorScale = d3.scale.category10();
@@ -103,7 +103,7 @@ var label = svg.append("text")
 var periodo = []
 
 // Load the data.
-d3.json("data/dilma2.json", function(nations) {
+d3.json("data/dilma1.json", function(nations) {
     periodo = acha_periodo(nations)
 // A bisector since many nation's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
@@ -136,7 +136,7 @@ d3.json("data/dilma2.json", function(nations) {
 
 // Start a transition that interpolates the data based on year.
     svg.transition()
-        .duration(3000)
+        .duration(6000)
         .tween("year", tweenYear)
         .each("end", enableInteraction);
 
