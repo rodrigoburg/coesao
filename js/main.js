@@ -31,6 +31,10 @@ var svg = d3.select("#chart").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+// variável que guarda os meses e perdidos que estão nos dados
+var periodo = []
+var partidos = []
+
 // tradução do mês
 var traducao_mes = {
     "jan":"01",
@@ -99,12 +103,11 @@ var label = svg.append("text")
     .attr("x", width)
     .text("fev 2015");
 
-// variável que guarda os meses para os quais temos dados
-var periodo = []
-
 // Load the data.
 d3.json("data/dilma1.json", function(nations) {
     periodo = acha_periodo(nations)
+    partidos = acha_partidos(nations)
+
 // A bisector since many nation's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
 
@@ -236,4 +239,43 @@ d3.json("data/dilma1.json", function(nations) {
         })
         return saida
     }
+
+    function acha_partidos(dados) {
+        var saida = []
+        dados.forEach(function (d) {
+            saida.push(d.name)
+        })
+        adiciona_partidos()
+        return saida
+    }
 });
+
+//função para o menu de partidos
+function toggleSelect(el) {
+    var container_selecionadas = $("#partSelecionados"),
+        container_n_selecionadas = $("#partNSelecionados"),
+        item = $(el).parent();
+    $(el).toggleClass("selecionada").toggleClass("nao-selecionada").toggleClass("glyphicon").toggleClass("glyphicon-remove-circle");
+    if (item.parent()[0].id == "empNSelecionadas") {
+        container_selecionadas.append(item);
+        partidos.push($(el).text());
+    } else {
+        container_n_selecionadas.append(item);
+        partidos.splice(partidos.indexOf($(el).text()),1);
+    }
+    $("#partSelecionados li").sort(sort_comp).appendTo("#partSelecionados");
+    $("#partNSelecionados li").sort(sort_comp).appendTo("#partNSelecionados");
+    muda_partidos();
+}
+
+function adiciona_partidos() {
+    var botao = $("partSelecionados")
+    console.log(botao)
+    var i = 1
+    partidos.forEach(function (d) {
+        var item = '<li role="presentation" data-pos="'+i+'"><a role="menuitem" onclick="toggleSelect(this);" class="selecionada glyphicon glyphicon-remove-circle" tabindex="-1" href="#">'+d+'</a></li>'
+        console.log(item)
+        botao.append(item)
+        i++
+    })
+}
