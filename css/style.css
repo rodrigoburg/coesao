@@ -116,8 +116,7 @@ ul {
 }
 
 li {
-  width: 690px;
-  margin-left: 30px;
+  width: 50px;
 }
 
 a {
@@ -243,4 +242,8 @@ text {
     fill: none;
     pointer-events: all;
     cursor: ew-resize;
+}
+
+.selecionada {
+    padding-left:
 }

@@ -10,9 +10,9 @@ function color(d) { return d.name; }
 function key(d) { return d.name; }
 
 // Chart dimensions.
-var margin = {top: 50, right: 19.5, bottom: 19.5, left: 39.5},
+var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     width = 960 - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 600 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
 var xScale = d3.scale.linear().domain([0, 18]).range([50, width]),
@@ -34,6 +34,7 @@ var svg = d3.select("#chart").append("svg")
 // variável que guarda os meses e perdidos que estão nos dados
 var periodo = []
 var partidos = []
+var partidos_selecionados = []
 
 // tradução do mês
 var traducao_mes = {
@@ -107,6 +108,7 @@ var label = svg.append("text")
 d3.json("data/dilma1.json", function(nations) {
     periodo = acha_periodo(nations)
     partidos = acha_partidos(nations)
+    partidos_selecionados = partidos
 
 // A bisector since many nation's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
@@ -117,6 +119,7 @@ d3.json("data/dilma1.json", function(nations) {
         .selectAll(".dot")
         .data(interpolateData(0))
         .enter().append("circle")
+        .attr("id", function(d) { return d.name})
         .attr("class", "dot")
         .style("fill", function(d) { return colorScale(color(d)); })
         .call(position)
@@ -245,9 +248,9 @@ d3.json("data/dilma1.json", function(nations) {
         dados.forEach(function (d) {
             saida.push(d.name)
         })
-        adiciona_partidos()
         return saida
     }
+    adiciona_partidos()
 });
 
 //função para o menu de partidos
@@ -256,26 +259,37 @@ function toggleSelect(el) {
         container_n_selecionadas = $("#partNSelecionados"),
         item = $(el).parent();
     $(el).toggleClass("selecionada").toggleClass("nao-selecionada").toggleClass("glyphicon").toggleClass("glyphicon-remove-circle");
-    if (item.parent()[0].id == "empNSelecionadas") {
+    if (item.parent()[0].id == "partNSelecionados") {
         container_selecionadas.append(item);
-        partidos.push($(el).text());
+        partidos_selecionados.push($(el).text());
+        coloca_partido($(el).text())
     } else {
         container_n_selecionadas.append(item);
-        partidos.splice(partidos.indexOf($(el).text()),1);
+        partidos_selecionados.splice(partidos_selecionados.indexOf($(el).text().trim()),1);
+        tira_partido($(el).text())
     }
     $("#partSelecionados li").sort(sort_comp).appendTo("#partSelecionados");
     $("#partNSelecionados li").sort(sort_comp).appendTo("#partNSelecionados");
-    muda_partidos();
+}
+
+function sort_comp(a,b) {
+    return $(b).data('pos') < $(a).data("pos") ? 1 : -1;
 }
 
 function adiciona_partidos() {
-    var botao = $("partSelecionados")
-    console.log(botao)
+    var botao = $("#partSelecionados")
     var i = 1
     partidos.forEach(function (d) {
-        var item = '<li role="presentation" data-pos="'+i+'"><a role="menuitem" onclick="toggleSelect(this);" class="selecionada glyphicon glyphicon-remove-circle" tabindex="-1" href="#">'+d+'</a></li>'
-        console.log(item)
+        var item = '<li role="presentation" data-pos="'+i+'"><a role="menuitem" onclick="toggleSelect(this);" class="selecionada glyphicon glyphicon-remove-circle" tabindex="-1" href="#"> '+d+'</a></li>'
         botao.append(item)
         i++
     })
+}
+
+function coloca_partido(sigla) {
+    $("#"+sigla.trim()).show()
+}
+
+function tira_partido(sigla) {
+    $("#"+sigla.trim()).hide()
 }
