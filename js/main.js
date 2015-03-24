@@ -225,7 +225,7 @@ d3.json("data/dilma1.json", function(nations) {
 // After the transition finishes, you can mouseover to change the year.
     function enableInteraction() {
         var yearScale = d3.scale.linear()
-            .domain([0, periodo.length])
+            .domain([0, (periodo.length-1)])
             .range([box.x + 10, box.x + box.width - 10])
             .clamp(true);
 
