@@ -247,3 +247,23 @@ text {
 .selecionada {
     padding-left:
 }
+
+a.selecionada {
+    width:50 !important;
+}
+a.nao-selecionada {
+    width:50 !important;
+}
+div.tooltip {
+  position: absolute;
+  text-align: left;
+  width: auto;
+  height: auto;
+  padding: 6px;
+  margin-left: 35px;
+  font: 14px Arial;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}

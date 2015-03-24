@@ -1,6 +1,9 @@
 /**
  * Created by rodrigoburg on 23/03/15.
  */
+var div = d3.select("body").append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
 
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.variancia; }
@@ -12,7 +15,7 @@ function key(d) { return d.name; }
 // Chart dimensions.
 var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     width = 960 - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    height = 550 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
 var xScale = d3.scale.linear().domain([0, 18]).range([50, width]),
@@ -141,17 +144,15 @@ d3.json("data/dilma1.json", function(nations) {
     periodo = acha_periodo(nations)
     partidos = acha_partidos(nations)
     partidos_selecionados = partidos
+    
     //faz um multiplicador que transformará o index de cada partido em um número entre 0 e o total de cores da paleta)
     var multiplicador = Object.keys(paleta).length/partidos.length
 
-
     for (p in partidos) {
         var cor = parseInt(p*multiplicador)
-
         //após calcular o index novo do partido, adiciona isso numa variável global
         cores[partidos[p]] = paleta[cor]
     }
-
 
 // A bisector since many nation's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
@@ -167,11 +168,24 @@ d3.json("data/dilma1.json", function(nations) {
         .style("fill", function(d) { return color(d); })
         .style("stroke", function(d) { return color(d); })
         .call(position)
-        .sort(order);
-
-// Add a title.
-    dot.append("title")
-        .text(function(d) { return d.name; });
+        .sort(order)
+        .on("mouseover", function (d) {            
+            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + d.variancia)
+            div.style("left", (d3.event.pageX - 150) + "px")
+                .style("top", (d3.event.pageY - 50) + "px")
+            div.transition()
+                .duration(300)
+                .style("opacity", 1); 
+        })
+        .on('mousemove', function(d) {
+             div.style("left", (d3.event.pageX - 150) + "px")
+                .style("top", (d3.event.pageY - 50) + "px");
+        })
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(400)
+                .style("opacity", 0);
+        });
 
 // Add an overlay for the year label.
     var box = label.node().getBBox();
@@ -186,19 +200,21 @@ d3.json("data/dilma1.json", function(nations) {
 
 // Start a transition that interpolates the data based on year.
     svg.transition()
-        .duration(6000)
+        .duration(5000)
         .tween("year", tweenYear)
         .each("end", enableInteraction);
 
 // Positions the dots based on data.
     function position(dot) {
-        dot .attr("cx", function(d) { return xScale(x(d)); })
+        dot 
+            .transition().duration(100)
+            .attr("cx", function(d) { return xScale(x(d)); })
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { return radiusScale(radius(d)); })
-	    .attr("stroke-width", "7")
-	    .attr("stroke", function(d) { return color(d); })
-	    .attr("fill-opacity", function(d) { return (7 - x(d))/7 } )
-        .attr("stroke-opacity", function(d) { return (7 - x(d))/7 } );
+    	    .attr("stroke-width", "7")
+    	    .attr("stroke", function(d) { return color(d); })
+    	    .attr("fill-opacity", function(d) { return (7 - x(d))/7 } )
+            .attr("stroke-opacity", function(d) { return (7 - x(d))/7 } );
     }
 
 // Defines a sort order so that the smallest dots are drawn on top.
@@ -231,7 +247,6 @@ d3.json("data/dilma1.json", function(nations) {
         }
 
         function mousemove() {
-            svg.transition().duration(2000)
             displayYear(yearScale.invert(d3.mouse(this)[0]));
         }
     }
@@ -317,18 +332,43 @@ function toggleSelect(el) {
     $("#partNSelecionados li").sort(sort_comp).appendTo("#partNSelecionados");
 }
 
+function tira_todos() {
+    var el = $(".selecionada")
+    el.each(function (d,item) {
+        if ($(item).text() != "Retirar todos") 
+            toggleSelect(item)
+    })
+}
+
+function coloca_todos() {
+    var el = $(".nao-selecionada")
+    el.each(function (d,item) {
+        if ($(item).text() != "Selecionar todos") 
+            toggleSelect(item)
+    })
+    
+}
+
 function sort_comp(a,b) {
     return $(b).data('pos') < $(a).data("pos") ? 1 : -1;
 }
 
 function adiciona_partidos() {
     var botao = $("#partSelecionados")
-    var i = 1
+    //primeiro botão é o que tira todos
+    var item = '<li role="presentation" data-pos="'+1+'"><a role="menuitem" style="width:140px" onclick="tira_todos();" class="selecionada" tabindex="-1" href="#">Retirar todos</a></li>'
+    botao.append(item)
+    
+    var i = 2
     partidos.forEach(function (d) {
-        var item = '<li role="presentation" data-pos="'+i+'"><a role="menuitem" onclick="toggleSelect(this);" class="selecionada glyphicon glyphicon-remove-circle" tabindex="-1" href="#"> '+d+'</a></li>'
+        item = '<li role="presentation" data-pos="'+i+'"><a role="menuitem" style="width:100px" onclick="toggleSelect(this);" class="selecionada glyphicon glyphicon-remove-circle" tabindex="-1" href="#"> '+d+'</a></li>'
         botao.append(item)
         i++
     })
+    
+    //e, na outra lista, colocamos botão que coloca todos
+    item = '<li role="presentation" data-pos="1"><a role="menuitem" style="width:140px"onclick="coloca_todos();" class="nao-selecionada" tabindex="-1" href="#">Selecionar todos</a></li>'
+    $("#partNSelecionados").append(item)
 }
 
 function coloca_partido(sigla) {
