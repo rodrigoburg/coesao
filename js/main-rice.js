@@ -18,7 +18,7 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 550 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, 1]).range([1, width]),
+var xScale = d3.scale.linear().domain([0, 1]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
@@ -208,7 +208,7 @@ d3.json("data/dilma1.json", function(nations) {
     function position(dot) {
         dot 
             .transition().duration(100)
-            .attr("cx", function(d) { return xScale(x(d)); })
+            .attr("cx", function(d) { return xScale(x(d))/200; })
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { return radiusScale(radius(d)); })
     	    .attr("stroke-width", "7")
