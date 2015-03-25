@@ -20,9 +20,15 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 550 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, 18]).range([50, width]),
+var xScale = d3.scale.linear().domain([0, 1]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
+
+// Cria escala para dispersão
+var transScale = d3.scale.linear()
+	.domain([0,18])
+	.range([0,1]);
+
 
 // The x & y axes.
 var xAxis = d3.svg.axis().orient("bottom").scale(xScale),
@@ -122,7 +128,7 @@ svg.append("text")
     .attr("text-anchor", "end")
     .attr("x", width)
     .attr("y", height - 6)
-    .text("índice de governismo");
+    .text("índice de dispersão");
 
 // Add a y-axis label.
 svg.append("text")
@@ -131,7 +137,7 @@ svg.append("text")
     .attr("y", 6)
     .attr("dy", ".75em")
     .attr("transform", "rotate(-90)")
-    .text("índice de coesão");
+    .text("índice de governismo");
 
 // Add the year label; the value is set on transition.
 var label = svg.append("text")
@@ -206,11 +212,13 @@ d3.json("data/dilma1.json", function(nations) {
         .tween("year", tweenYear)
         .each("end", enableInteraction	);
 
+
+
 // Positions the dots based on data.
     function position(dot) {
         dot 
             .transition().duration(100)
-            .attr("cx", function(d) { return xScale(x(d)); })
+            .attr("cx", function(d) { return xScale(transScale(x(d)) ); })
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { return radiusScale(radius(d)); })
     	    .attr("stroke-width", "7")
