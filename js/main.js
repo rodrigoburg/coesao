@@ -1,11 +1,11 @@
 /**
  * Created by rodrigoburg on 23/03/15.
  */
-var testar_valores = [];
-
 var div = d3.select("body").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
+
+var formatPercent = d3.format(".2p");
 
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.variancia; }
@@ -178,7 +178,7 @@ d3.json("data/dilma1.json", function(nations) {
         .call(position)
         .sort(order)
         .on("mouseover", function (d) {            
-            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + d.variancia)
+            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + formatPercent(transScale(d.variancia)))
             div.style("left", (d3.event.pageX - 150) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
