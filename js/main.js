@@ -120,7 +120,7 @@ svg.append("text")
     .attr("text-anchor", "end")
     .attr("x", width)
     .attr("y", height - 6)
-    .text("income per capita, inflation-adjusted (dollars)");
+    .text("índice de governismo");
 
 // Add a y-axis label.
 svg.append("text")
@@ -129,7 +129,7 @@ svg.append("text")
     .attr("y", 6)
     .attr("dy", ".75em")
     .attr("transform", "rotate(-90)")
-    .text("life expectancy (years)");
+    .text("índice de coesão");
 
 // Add the year label; the value is set on transition.
 var label = svg.append("text")
@@ -200,9 +200,9 @@ d3.json("data/dilma1.json", function(nations) {
 
 // Start a transition that interpolates the data based on year.
     svg.transition()
-        .duration(5000)
+        .duration(10000).ease("linear")
         .tween("year", tweenYear)
-        .each("end", enableInteraction);
+        .each("end", enableInteraction	);
 
 // Positions the dots based on data.
     function position(dot) {
@@ -230,7 +230,7 @@ d3.json("data/dilma1.json", function(nations) {
             .clamp(true);
 
 // Cancel the current transition, if any.
-        svg.transition().duration(100);
+        svg.transition().duration(5000).ease("linear");
 
         overlay
             .on("mouseover", mouseover)
