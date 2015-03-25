@@ -1,6 +1,8 @@
 /**
  * Created by rodrigoburg on 23/03/15.
  */
+var testar_valores = [];
+
 var div = d3.select("body").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
@@ -213,8 +215,8 @@ d3.json("data/dilma1.json", function(nations) {
             .attr("r", function(d) { return radiusScale(radius(d)); })
     	    .attr("stroke-width", "7")
     	    .attr("stroke", function(d) { return color(d); })
-    	    .attr("fill-opacity", function(d) { return (7 - x(d))/7 } )
-            .attr("stroke-opacity", function(d) { return (7 - x(d))/7 } );
+    	    .attr("fill-opacity", function(d) { var l = x(d); return( ((18 - l)/18) ); } )
+            .attr("stroke-opacity", function(d) { return( (18 - x(d))/18 ) } );
     }
 
 // Defines a sort order so that the smallest dots are drawn on top.
