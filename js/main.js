@@ -93,34 +93,42 @@ var traducao_mes = {
 }
 
 var paleta = {
-    0:'#A11217',
-    1:'#BE003E',
-    2:'#BC005C',
-    3:'#BA007C',
-    4:'#98007F',
-    5:'#7B057E',
-    6:'#5E196F',
-    7:'#45187D',
-    8:'#3A3A8B',
-    9:'#00408F',
-    10:'#00528B',
-    11:'#0066A4',
-    12:'#007CC0',
-    13:'#009BDB',
-    14:'#0096B2',
-    15:'#009493',
-    16:'#008270',
-    17:'#009045',
-    18:'#00602D',
-    19: '#5F8930',
-    20:'#7BAC39',
-    21:'#A3BD31',
-    22:'#CAD226',
-    23:'#FEEE00',
-    24:'#E9BC00',
-    25:'#B6720A',
-    26:'#9A740F',
-    27: '#634600'
+    PTC:'#A11217',
+    PT:'#BE003E',
+    PCdoB:'#BC005C',
+    PSL:'#BA007C',
+    PRB:'#98007F',
+    PRTB:'#7B057E',
+    PP:'#5E196F',
+    PHS:'#45187D',
+    PMDB:'#3A3A8B',
+    PTB:'#00408F',
+    PRP:'#00528B',
+    PSB:'#0066A4',
+    PROS:'#007CC0',
+    PTN:'#009BDB',
+    PDT:'#0096B2',
+    PR:'#009493',
+    PTdoB:'#008270',
+    PV:'#009045',
+    PSC:'#00602D',
+    PMN:'#5F8930',
+    PSD:'#7BAC39',
+    PEN:'#A3BD31',
+    PSDC:'#CAD226',
+    SDD:'#FEEE00',
+    PSOL:'#E9BC00',
+    PPS:'#B6720A',
+    DEM:'#9A740F',
+    PSDB:'#634600',
+    PST:'#634600',
+    PL:'#634600',
+    PPL:'#634600',
+    PMR:'#634600',
+    PFL_DEM:'#634600',
+    PRONA:'#634600',
+    PAN:'#634600',
+    PPB:'#634600'
 }
 
 
@@ -194,8 +202,8 @@ d3.json("data/dilma1.json", function(nations) {
         .enter().append("circle")
         .attr("partido", function(d) { return d.name})
         .attr("class", "dot")
-        .style("fill", function(d, i) { return color(d); })
-        .style("stroke", function(d) { return color(d); })
+        .style("fill", function(d, i) { return paleta[d.name]; })
+        .style("stroke", function(d) { return paleta[d.name]; })
         .call(position)
         .sort(order)
         .on("mouseover", function (d) {            
@@ -229,7 +237,7 @@ d3.json("data/dilma1.json", function(nations) {
 
 // Start a transition that interpolates the data based on year.
     svg.transition()
-        .duration(10000).ease("linear")
+        .duration(7000).ease("linear")
         .tween("year", tweenYear)
         .each("end", enableInteraction	);
 
@@ -243,13 +251,13 @@ d3.json("data/dilma1.json", function(nations) {
     	    .attr("fill-opacity", function(d) { var l = x(d);  if (valor_grupo==1) { var opacidade = 1; } else { var opacidade = ((18 - l)/(18*(valor_grupo))); }  ; return opacidade ; } )
             .attr("stroke-width", "0")
             .style("visibility", function(d) {
-                return aparece(d) ? "visible" : "hidden";
+                return aparece(d)
             });
     }
 
     //checa se o partido tem a data em questão. se não tiver, tira ele do gráfico
     function aparece(d) {
-        return (partido_data[d.name].indexOf(ano) > -1)
+        return partido_data[d.name].indexOf(ano) > -1 ? "visible":"hidden";
     }
 
 // Defines a sort order so that the smallest dots are drawn on top.
