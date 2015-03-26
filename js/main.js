@@ -213,14 +213,14 @@ d3.json("data/dilma1.json", function(nations) {
         .sort(order)
         .on("mouseover", function (d) {            
             div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + formatPercent(transScale(d.variancia)))
-            div.style("left", (d3.event.pageX - 150) + "px")
+            div.style("left", (d3.event.pageX - 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
                 .duration(300)
                 .style("opacity", 1); 
         })
         .on('mousemove', function(d) {
-             div.style("left", (d3.event.pageX - 150) + "px")
+             div.style("left", (d3.event.pageX - 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px");
         })
         .on("mouseout", function(d) {
