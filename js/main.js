@@ -33,8 +33,6 @@ var max_gambiarra
 var gambi
 
 
-
-
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.variancia; }
 function y(d) { return d.governismo; }
@@ -246,8 +244,6 @@ d3.json("data/dilma1.json", function(nations) {
         .tween("year", tweenYear)
         .each("end", enableInteraction	);
 
-
-
 // Positions the dots based on data.
     function position(dot) {
         dot 
@@ -319,21 +315,35 @@ d3.json("data/dilma1.json", function(nations) {
 // Interpolates the dataset for the given (fractional) year.
     function interpolateData(year) {
         year = periodo[Math.floor(year)]
-        var a = nations.map(function(d) {
+
+        var a = nations.map(function (d) {
             return {
                 name: d.name,
-                governismo: interpolateValues(d.governismo, year),
-                variancia: interpolateValues(d.variancia, year),
-                num_deputados: interpolateValues(d.num_deputados, year)
-            };
-        });
+                governismo: d.governismo.filter(function (e) {return e[0] == year})[0],
+                variancia: d.variancia.filter(function (e) {return e[0] == year})[0],
+                num_deputados: d.num_deputados.filter(function (e) {return e[0] == year})[0]
+            }
+        })
+        a = a.filter(function (d) {
+            return d.governismo != undefined
+        })
+        a = a.map(function (d) {
+            return {
+                name: d.name,
+                governismo: d.governismo[1],
+                variancia: d.variancia[1],
+                num_deputados: d.num_deputados[1]
+            }
+        })
         return(a)
     }
+
 
 // Finds (and possibly interpolates) the value for the specified year.
     function interpolateValues(values, year) {
         var i = bisect.left(values, year, 0, values.length - 1),
             a = values[i];
+        console.log(a)
         return a[1];
     }
 
