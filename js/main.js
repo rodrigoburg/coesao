@@ -205,7 +205,7 @@ d3.json("data/dilma1.json", function(nations) {
         .selectAll(".dot")
         .data(function(d, i) { return d; } ) // d is a array[i]
         .enter().append("circle")
-        .attr("id", function(d) { return d.name})
+        .attr("partido", function(d) { return d.name})
         .attr("class", "dot")
         .style("fill", function(d, i) { return color(d); })
         .style("stroke", function(d) { return color(d); })
@@ -213,14 +213,14 @@ d3.json("data/dilma1.json", function(nations) {
         .sort(order)
         .on("mouseover", function (d) {            
             div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + formatPercent(transScale(d.variancia)))
-            div.style("left", (d3.event.pageX - 50) + "px")
+            div.style("left", (d3.event.pageX - 600) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
                 .duration(300)
                 .style("opacity", 1); 
         })
         .on('mousemove', function(d) {
-             div.style("left", (d3.event.pageX - 50) + "px")
+             div.style("left", (d3.event.pageX - 600) + "px")
                 .style("top", (d3.event.pageY - 50) + "px");
         })
         .on("mouseout", function(d) {
@@ -416,9 +416,9 @@ function adiciona_partidos() {
 }
 
 function coloca_partido(sigla) {
-    $("#"+sigla.trim()).show()
+    $("circle[partido='"+sigla.trim()+"']").show()
 }
 
 function tira_partido(sigla) {
-    $("#"+sigla.trim()).hide()
+    $("circle[partido='"+sigla.trim()+"']").hide()
 }
