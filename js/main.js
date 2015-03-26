@@ -10,7 +10,7 @@ var formatPercent = d3.format(".2p");
 // define uma gambiarra muito boa
 
 var gambiarra = function() {
-    if ( controle_gambiarra > 2*max_gambiarra ) {
+    if ( controle_gambiarra >= 2*max_gambiarra ) {
         if ( controle_gambiarra == 3*max_gambiarra) {
             controle_gambiarra = 1;
             return 1;
@@ -18,7 +18,7 @@ var gambiarra = function() {
         controle_gambiarra += 1;
         return 4;
     }
-    else if ( controle_gambiarra > max_gambiarra ) {
+    else if ( controle_gambiarra >= max_gambiarra ) {
         controle_gambiarra += 1;
         return 2;
     }
@@ -257,8 +257,7 @@ d3.json("data/dilma1.json", function(nations) {
             .attr("r", function(d) { gambi = gambiarra(); return Math.abs(radiusScale(radius(d)/gambi)); })
     	    .attr("stroke-width", "0")
     	    .attr("stroke", function(d) { return color(d); })
-    	    .attr("fill-opacity", function(d) { var l = x(d); return( ((18 - l)/18)/gambi ); } )
-            .attr("stroke-opacity", function(d) { return( (18 - x(d))/18 ) } );
+    	    .attr("fill-opacity", function(d) { var l = x(d); return( ((18 - l)/(18*(gambi^.111))) ); } )
     }
 
 // Defines a sort order so that the smallest dots are drawn on top.
