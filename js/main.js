@@ -7,6 +7,34 @@ var div = d3.select("body").append("div")
 
 var formatPercent = d3.format(".2p");
 
+// define uma gambiarra muito boa
+
+var gambiarra = function() {
+    if ( controle_gambiarra > 2*max_gambiarra ) {
+        if ( controle_gambiarra == 3*max_gambiarra) {
+            controle_gambiarra = 1;
+            return 1;
+        }
+        controle_gambiarra += 1;
+        return 4;
+    }
+    else if ( controle_gambiarra > max_gambiarra ) {
+        controle_gambiarra += 1;
+        return 2;
+    }
+    else {
+        controle_gambiarra += 1;
+        return 1;
+    }
+}
+
+var controle_gambiarra = 0
+var max_gambiarra
+var gambi
+
+
+
+
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.variancia; }
 function y(d) { return d.governismo; }
@@ -164,16 +192,22 @@ d3.json("data/dilma1.json", function(nations) {
 
 // A bisector since many nation's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
-
+    var tres = [ interpolateData(0), interpolateData(0) , interpolateData(0)];
+    max_gambiarra = interpolateData(0).length;
 // Add a dot per nation. Initialize the data at 0 (primeiro mês), and set the colors.
-    var dot = svg.append("g")
-        .attr("class", "dots")
+    var grupo = svg.append("g")
+        .attr("class", "grupos")
+        .selectAll("g")
+        .data(tres)
+        .enter().append("g");
+
+    var dot = grupo
         .selectAll(".dot")
-        .data(interpolateData(0))
+        .data(function(d, i) { return d; } ) // d is a array[i]
         .enter().append("circle")
         .attr("id", function(d) { return d.name})
         .attr("class", "dot")
-        .style("fill", function(d) { return color(d); })
+        .style("fill", function(d, i) { return color(d); })
         .style("stroke", function(d) { return color(d); })
         .call(position)
         .sort(order)
@@ -220,10 +254,10 @@ d3.json("data/dilma1.json", function(nations) {
             .transition().duration(100)
             .attr("cx", function(d) { return xScale(transScale(x(d)) ); })
             .attr("cy", function(d) { return yScale(y(d)); })
-            .attr("r", function(d) { return radiusScale(radius(d)); })
-    	    .attr("stroke-width", "7")
+            .attr("r", function(d) { gambi = gambiarra(); return Math.abs(radiusScale(radius(d)/gambi)); })
+    	    .attr("stroke-width", "0")
     	    .attr("stroke", function(d) { return color(d); })
-    	    .attr("fill-opacity", function(d) { var l = x(d); return( ((18 - l)/18) ); } )
+    	    .attr("fill-opacity", function(d) { var l = x(d); return( ((18 - l)/18)/gambi ); } )
             .attr("stroke-opacity", function(d) { return( (18 - x(d))/18 ) } );
     }
 
