@@ -32,6 +32,8 @@ var correcao_grupos = function() {
 var controle_circulos = 0; // ordenação de círculos para a função
 var max_circulos; // número máximo de círculos 
 var valor_grupo;
+var ano;
+var partido_data = {} //variável que mostra quais datas existem para cada partido
 
 
 // Various accessors that specify the four dimensions of data to visualize.
@@ -76,21 +78,6 @@ var cores = {}
 
 // tradução do mês
 var traducao_mes = {
-    "jan":"01",
-    "fev":"02",
-    "mar":"03",
-    "abr":"04",
-    "mai":"05",
-    "jun":"06",
-    "jul":"07",
-    "ago":"08",
-    "set":"09",
-    "out":"10",
-    "nov":"11",
-    "dez":"12"
-}
-
-var traducao_mes2 = {
     "01":"jan",
     "02":"fev",
     "03":"mar",
@@ -179,6 +166,7 @@ d3.json("data/dilma1.json", function(nations) {
     periodo = acha_periodo(nations)
     partidos = acha_partidos(nations)
     partidos_selecionados = partidos
+    partido_data = acha_data(nations)
     
     //faz um multiplicador que transformará o index de cada partido em um número entre 0 e o total de cores da paleta)
     var multiplicador = Object.keys(paleta).length/partidos.length
@@ -253,7 +241,15 @@ d3.json("data/dilma1.json", function(nations) {
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { valor_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/valor_grupo)); })
     	    .attr("fill-opacity", function(d) { var l = x(d);  if (valor_grupo==1) { var opacidade = 1; } else { var opacidade = ((18 - l)/(18*(valor_grupo))); }  ; return opacidade ; } )
-            .attr("stroke-width", "0");
+            .attr("stroke-width", "0")
+            .style("visibility", function(d) {
+                return aparece(d) ? "visible" : "hidden";
+            });
+    }
+
+    //checa se o partido tem a data em questão. se não tiver, tira ele do gráfico
+    function aparece(d) {
+        return (partido_data[d.name].indexOf(ano) > -1)
     }
 
 // Defines a sort order so that the smallest dots are drawn on top.
@@ -307,44 +303,31 @@ d3.json("data/dilma1.json", function(nations) {
         if (year == periodo.length) {
             year = year -1
         }
-
         var temp = periodo[Math.floor(year)];
         var ano = temp.split("-")[0]
-        var mes = traducao_mes2[temp.split("-")[1]]
+        var mes = traducao_mes[temp.split("-")[1]]
         return mes + " " + ano
     }
 // Interpolates the dataset for the given (fractional) year.
     function interpolateData(year) {
         year = periodo[Math.floor(year)]
+        ano = year
 
-        var a = nations.map(function (d) {
+        var a = nations.map(function(d) {
             return {
                 name: d.name,
-                governismo: d.governismo.filter(function (e) {return e[0] == year})[0],
-                variancia: d.variancia.filter(function (e) {return e[0] == year})[0],
-                num_deputados: d.num_deputados.filter(function (e) {return e[0] == year})[0]
-            }
-        })
-        a = a.filter(function (d) {
-            return d.governismo != undefined
-        })
-        a = a.map(function (d) {
-            return {
-                name: d.name,
-                governismo: d.governismo[1],
-                variancia: d.variancia[1],
-                num_deputados: d.num_deputados[1]
-            }
-        })
+                governismo: interpolateValues(d.governismo, year),
+                variancia: interpolateValues(d.variancia, year),
+                num_deputados: interpolateValues(d.num_deputados, year)
+            };
+        });
         return(a)
     }
-
 
 // Finds (and possibly interpolates) the value for the specified year.
     function interpolateValues(values, year) {
         var i = bisect.left(values, year, 0, values.length - 1),
             a = values[i];
-        console.log(a)
         return a[1];
     }
 
@@ -363,6 +346,21 @@ d3.json("data/dilma1.json", function(nations) {
         })
         return saida
     }
+
+    function acha_data(dados) {
+        var saida = {}
+        dados.forEach(function (d) {
+            if (!(d.name in saida)) {
+                saida[d.name] = []
+            }
+            d.governismo.forEach(function (e) {
+                saida[d.name].push(e[0])
+            })
+        })
+        return saida
+
+    }
+
     adiciona_partidos()
 });
 
