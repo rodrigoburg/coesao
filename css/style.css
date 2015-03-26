@@ -7,6 +7,14 @@ html {
   min-width: 1040px;
 }
 
+p.linhafina {
+    font-size:16px;
+}
+
+p.explicacao {
+    font-size:12px;
+}
+
 .ocks-org body {
   background: #fcfcfa;
   color: #333;

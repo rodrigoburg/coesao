@@ -7,30 +7,31 @@ var div = d3.select("body").append("div")
 
 var formatPercent = d3.format(".2p");
 
-// define uma gambiarra muito boa
-
-var gambiarra = function() {
-    if ( controle_gambiarra >= 2*max_gambiarra ) {
-        if ( controle_gambiarra == 3*max_gambiarra) {
-            controle_gambiarra = 1;
+// função para poder executar uma correção para cada grupo de círculos
+// Retorna um valor para cada grupo. 1, para o grupo 1; 2, para o grupo 2; 4, para o grupo 3.
+// A diferença 
+var correcao_grupos = function() {
+    if ( controle_circulos >= 2*max_circulos ) {
+        if ( controle_circulos == 3*max_circulos) {
+            controle_circulos = 1;
             return 1;
         }
-        controle_gambiarra += 1;
+        controle_circulos += 1;
         return 4;
     }
-    else if ( controle_gambiarra >= max_gambiarra ) {
-        controle_gambiarra += 1;
+    else if ( controle_circulos >= max_circulos ) {
+        controle_circulos += 1;
         return 2;
     }
     else {
-        controle_gambiarra += 1;
+        controle_circulos += 1;
         return 1;
     }
 }
 
-var controle_gambiarra = 0
-var max_gambiarra
-var gambi
+var controle_circulos = 0; // ordenação de círculos para a função
+var max_circulos; // número máximo de círculos 
+var valor_grupo;
 
 
 // Various accessors that specify the four dimensions of data to visualize.
@@ -191,7 +192,7 @@ d3.json("data/dilma1.json", function(nations) {
 // A bisector since many nation's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
     var tres = [ interpolateData(0), interpolateData(0) , interpolateData(0)];
-    max_gambiarra = interpolateData(0).length;
+    max_circulos = interpolateData(0).length;
 // Add a dot per nation. Initialize the data at 0 (primeiro mês), and set the colors.
     var grupo = svg.append("g")
         .attr("class", "grupos")
@@ -250,8 +251,8 @@ d3.json("data/dilma1.json", function(nations) {
             .transition().duration(100)
             .attr("cx", function(d) { return xScale(transScale(x(d)) ); })
             .attr("cy", function(d) { return yScale(y(d)); })
-            .attr("r", function(d) { gambi = gambiarra(); return Math.abs(radiusScale(radius(d)/gambi)); })
-    	    .attr("fill-opacity", function(d) { var l = x(d);  if (gambi==1) { var opacidade = 1; } else { var opacidade = ((18 - l)/(18*(gambi))); }  ; return( opacidade ); } )
+            .attr("r", function(d) { valor_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/valor_grupo)); })
+    	    .attr("fill-opacity", function(d) { var l = x(d);  if (valor_grupo==1) { var opacidade = 1; } else { var opacidade = ((18 - l)/(18*(valor_grupo))); }  ; return opacidade ; } )
             .attr("stroke-width", "0");
     }
 
