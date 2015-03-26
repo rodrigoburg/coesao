@@ -255,7 +255,7 @@ d3.json("data/dilma1.json", function(nations) {
             .attr("cx", function(d) { return xScale(transScale(x(d)) ); })
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { gambi = gambiarra(); return Math.abs(radiusScale(radius(d)/gambi)); })
-    	    .attr("fill-opacity", function(d) { var l = x(d); console.log(gambi); if (gambi==1) { var opacidade = 1; } else { var opacidade = ((18 - l)/(18*(gambi))); }  ; return( opacidade ); } )
+    	    .attr("fill-opacity", function(d) { var l = x(d);  if (gambi==1) { var opacidade = 1; } else { var opacidade = ((18 - l)/(18*(gambi))); }  ; return( opacidade ); } )
             .attr("stroke-width", "0");
     }
 
