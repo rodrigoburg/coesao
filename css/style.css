@@ -1,33 +1,33 @@
 @media (min-width: 858px) {
-    html {
+    html.edados {
         font-size: 12px;
     }
 }
 
 @media (min-width: 780px) {
-    html {
+    html.edados {
         font-size: 11px;
     }
 }
 
 @media (min-width: 702px) {
-    html {
+    html.edados  {
         font-size: 10px;
     }
 }
 
 @media (min-width: 724px) {
-    html {
+    html.edados  {
         font-size: 9px;
     }
 }
 
 @media (max-width: 623px) {
-    html {
+    html.edados  {
         font-size: 8px;
     }
 }
-html {
+html.edados {
     width: 1000px;
 }
 
