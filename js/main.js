@@ -5,7 +5,6 @@ var div = d3.select("body").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
 
-var formatPercent = d3.format(".2p");
 
 // função para poder executar uma correção para cada grupo de círculos
 // Retorna um valor para cada grupo. 1, para o grupo 1; 2, para o grupo 2; 4, para o grupo 3.
@@ -49,14 +48,14 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 550 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, 1]).range([50, width]),
+var xScale = d3.scale.linear().domain([0, 10]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
 // Cria escala para dispersão
 var transScale = d3.scale.linear()
 	.domain([0,18])
-	.range([0,1]);
+	.range([0,10]);
 
 
 // The x & y axes.
@@ -207,7 +206,7 @@ d3.json("data/dilma1.json", function(nations) {
         .call(position)
         .sort(order)
         .on("mouseover", function (d) {            
-            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + formatPercent(transScale(d.variancia)))
+            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + transScale(d.variancia).toPrecision(1))
             div.style("left", (d3.event.pageX - 600) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
@@ -247,8 +246,8 @@ d3.json("data/dilma1.json", function(nations) {
             .transition().duration(100)
             .attr("cx", function(d) { return xScale(transScale(x(d)) ); })
             .attr("cy", function(d) { return yScale(y(d)); })
-            .attr("r", function(d) { valor_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/valor_grupo)); })
-    	    .attr("fill-opacity", function(d) { var l = x(d);  if (valor_grupo==1) { var opacidade = 1; } else { var opacidade = ((18 - l)/(18*(valor_grupo))); }  ; return opacidade ; } )
+            .attr("r", function(d) { valor_grupo = correcao_grupos(); console.log(valor_grupo); return Math.abs(radiusScale(radius(d)/valor_grupo)); })
+    	    .attr("fill-opacity", function(d) { var l = transScale(x(d)); var opacidade = (1-l/10);  opacidade = Math.pow(opacidade, valor_grupo*1.5);  return opacidade; } )// só criar uma função de controle semelhante e está resolvido
             .attr("stroke-width", "0")
             .style("visibility", function(d) {
                 return aparece(d)
