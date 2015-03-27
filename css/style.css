@@ -1,14 +1,43 @@
+@media (min-width: 858px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 780px) {
+    html {
+        font-size: 11px;
+    }
+}
+
+@media (min-width: 702px) {
+    html {
+        font-size: 10px;
+    }
+}
+
+@media (min-width: 724px) {
+    html {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 623px) {
+    html {
+        font-size: 8px;
+    }
+}
 html {
     width: 1000px;
 }
 
 p.linhafina {
-    font-size:17px;
+    font-size:2rem;
     text-align: justify;
 }
 
 p.explicacao {
-    font-size:12px;
+    font-size:1.3rem;
     text-align: justify;
 }
 
@@ -21,10 +50,10 @@ p.explicacao {
   width: 900px;
 }
 
-h1 {
+h1.titulo {
   font-family: "PT Sans", sans-serif;
   color: #000;
-  font-size: 64px;
+  font-size: 6rem;
   font-weight: 300;
   letter-spacing: -2px;
   margin: .3em 0 .1em 0;
@@ -101,7 +130,7 @@ text {
 }
 
 text.label {
-    font-size: 12px;
+    font-size: 1.3rem;
 
 }
 .label {
