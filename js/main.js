@@ -215,14 +215,14 @@ d3.json("data/dilma1.json", function(nations) {
         .sort(order)
         .on("mouseover", function (d) {            
             div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + transScale(d.variancia).toPrecision(1))
-            div.style("left", (d3.event.pageX - 600) + "px")
+            div.style("left", (d3.event.pageX - 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
                 .duration(300)
                 .style("opacity", 1); 
         })
         .on('mousemove', function(d) {
-             div.style("left", (d3.event.pageX - 600) + "px")
+             div.style("left", (d3.event.pageX - 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px");
         })
         .on("mouseout", function(d) {
@@ -244,7 +244,7 @@ d3.json("data/dilma1.json", function(nations) {
 
 // Start a transition that interpolates the data based on year.
     svg.transition()
-        .duration(7000).ease("linear")
+        .duration(5000).ease("linear")
         .tween("year", tweenYear)
         .each("end", enableInteraction	);
 
@@ -255,7 +255,14 @@ d3.json("data/dilma1.json", function(nations) {
             .attr("cx", function(d) { return xScale(transScale(x(d)) ); })
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
-    	    .attr("fill-opacity", function(d) { raio_grupo = correcao_grupos(); var l = transScale(x(d)); var opacidade = (1-l/10);  console.log(opacidade);  opacidade = opacidade/(Math.pow(raio_grupo,.5)); if (raio_grupo==1) { return 1; } else { return opacidade; } } )// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
+    	    .attr("fill-opacity", function(d) {
+                raio_grupo = correcao_grupos();
+                var l = transScale(x(d));
+                var opacidade = (0.85-l/9);
+                opacidade = opacidade/(Math.pow(raio_grupo,.1));
+                if (raio_grupo==1) { return  opacidade *0.9; }
+                else { return opacidade; }
+            })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
             .attr("stroke-width", "0")
             .style("visibility", function(d) {
                 return aparece(d)

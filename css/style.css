@@ -1,13 +1,15 @@
 html {
-  min-width: 1040px;
+    width: 1000px;
 }
 
 p.linhafina {
     font-size:17px;
+    text-align: justify;
 }
 
 p.explicacao {
     font-size:12px;
+    text-align: justify;
 }
 
 .edados body {
@@ -16,7 +18,7 @@ p.explicacao {
   font-family: "PT Serif", serif;
   margin: 1em auto 4em auto;
   position: relative;
-  width: 960px;
+  width: 900px;
 }
 
 h1 {
@@ -26,14 +28,6 @@ h1 {
   font-weight: 300;
   letter-spacing: -2px;
   margin: .3em 0 .1em 0;
-}
-
-body > p {
-  width: 720px;
-}
-
-body > blockquote {
-  width: 640px;
 }
 
 a {
