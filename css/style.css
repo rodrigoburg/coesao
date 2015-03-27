@@ -28,11 +28,12 @@
     }
 }
 html.edados {
-    width: 1000px;
+    width: 960px;
 }
 
 p.linhafina {
     font-size:2rem;
+    font-weight:bold;
     text-align: justify;
 }
 
@@ -47,11 +48,12 @@ p.explicacao {
   font-family: "PT Serif", serif;
   margin: 1em auto 4em auto;
   position: relative;
-  width: 900px;
+  width: 870px;
 }
 
 h1.titulo {
   font-family: "PT Sans", sans-serif;
+  font-weight:bold;
   color: #000;
   font-size: 6rem;
   font-weight: 300;
