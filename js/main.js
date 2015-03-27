@@ -30,9 +30,17 @@ var correcao_grupos = function() {
 
 var controle_circulos = 0; // ordenação de círculos para a função
 var max_circulos; // número máximo de círculos 
-var valor_grupo;
+var raio_grupo;
 var ano;
 var partido_data = {} //variável que mostra quais datas existem para cada partido
+
+
+
+// Escala para raio 
+
+var raioScale = d3.scale.linear()
+	.domain([1,2, 4])
+	.range([4,2, 1]);
 
 
 // Various accessors that specify the four dimensions of data to visualize.
@@ -246,8 +254,8 @@ d3.json("data/dilma1.json", function(nations) {
             .transition().duration(100)
             .attr("cx", function(d) { return xScale(transScale(x(d)) ); })
             .attr("cy", function(d) { return yScale(y(d)); })
-            .attr("r", function(d) { valor_grupo = correcao_grupos(); console.log(valor_grupo); return Math.abs(radiusScale(radius(d)/valor_grupo)); })
-    	    .attr("fill-opacity", function(d) { var l = transScale(x(d)); var opacidade = (1-l/10);  opacidade = Math.pow(opacidade, valor_grupo*1.5);  return opacidade; } )// só criar uma função de controle semelhante e está resolvido
+            .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
+    	    .attr("fill-opacity", function(d) { raio_grupo = correcao_grupos(); var l = transScale(x(d)); var opacidade = (1-l/10);    opacidade = opacidade/(Math.pow(raio_grupo,.5)); return opacidade; } )// Repare na função da transparência. Ela obtem a opacidade e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
             .attr("stroke-width", "0")
             .style("visibility", function(d) {
                 return aparece(d)
