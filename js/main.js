@@ -1,6 +1,9 @@
 /**
  * Created by rodrigoburg on 23/03/15.
  */
+var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
+url = "data/variancia_camara.json"
+
 var div = d3.select("body").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
@@ -35,7 +38,6 @@ var ano;
 var partido_data = {} //variável que mostra quais datas existem para cada partido
 
 
-
 // Escala para raio 
 
 var raioScale = d3.scale.linear()
@@ -47,13 +49,12 @@ var raioScale = d3.scale.linear()
 function x(d) { return d.variancia; }
 function y(d) { return d.governismo; }
 function radius(d) { return d.num_deputados; }
-function color(d) { return cores[d.name]; }
 function key(d) { return d.name; }
 
 // Chart dimensions.
 var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     width = 960 - margin.right,
-    height = 550 - margin.top - margin.bottom;
+    height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
 var xScale = d3.scale.linear().domain([0, 10]).range([50, width]),
@@ -177,7 +178,7 @@ var label = svg.append("text")
     .text("fev 2015");
 
 // Load the data.
-d3.json("data/dilma1.json", function(nations) {
+d3.json(url, function(nations) {
     periodo = acha_periodo(nations)
     partidos = acha_partidos(nations)
     partidos_selecionados = partidos
@@ -219,7 +220,8 @@ d3.json("data/dilma1.json", function(nations) {
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
                 .duration(300)
-                .style("opacity", 1); 
+                .style("opacity", 1);
+            console.log(d)
         })
         .on('mousemove', function(d) {
              div.style("left", (d3.event.pageX - 50) + "px")
@@ -258,7 +260,7 @@ d3.json("data/dilma1.json", function(nations) {
     	    .attr("fill-opacity", function(d) {
                 raio_grupo = correcao_grupos();
                 var l = transScale(x(d));
-                var opacidade = (0.85-l/9);
+                var opacidade = (0.85-l/100);
                 opacidade = opacidade/(Math.pow(raio_grupo,.1));
                 if (raio_grupo==1) { return  opacidade *0.9; }
                 else { return opacidade; }
