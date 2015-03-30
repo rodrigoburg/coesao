@@ -1,6 +1,7 @@
 /**
  * Created by rodrigoburg on 23/03/15.
  */
+
 var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
 url = "data/variancia_camara.json"
 
@@ -57,13 +58,13 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, 10]).range([50, width]),
+var xScale = d3.scale.linear().domain([0, 4]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
 // Cria escala para dispersão
 var transScale = d3.scale.linear()
-	.domain([0,18])
+	.domain([0,50])
 	.range([0,10]);
 
 
@@ -221,7 +222,6 @@ d3.json(url, function(nations) {
             div.transition()
                 .duration(300)
                 .style("opacity", 1);
-            console.log(d)
         })
         .on('mousemove', function(d) {
              div.style("left", (d3.event.pageX - 50) + "px")
@@ -260,9 +260,10 @@ d3.json(url, function(nations) {
     	    .attr("fill-opacity", function(d) {
                 raio_grupo = correcao_grupos();
                 var l = transScale(x(d));
-                var opacidade = (0.85-l/100);
-                opacidade = opacidade/(Math.pow(raio_grupo,.1));
-                if (raio_grupo==1) { return  opacidade *0.9; }
+                var opacidade = 1-l/10;
+                opacidade = opacidade/(Math.pow(raio_grupo,2));
+		console.log(opacidade);
+                if (raio_grupo==1) { return  1; }
                 else { return opacidade; }
             })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
             .attr("stroke-width", "0")
