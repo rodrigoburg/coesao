@@ -1,23 +1,23 @@
 @font-face {
 	font-family: Flama-Light;
-	src: url(http://dev.estadaodados.com/gapminder/fonts/FlamaLight/0/FlamaLight-Normal.otf);
+	src: url(http://dev.estadaodados.com/gapminder/fonts/FlamaLight/0/FlamaLight-Normal.wotf);
 }
 @font-face {
 	font-family: Flama-Book;
-	src: url(http://dev.estadaodados.com/gapminder/fonts/Flama/0/Flama-Book.otf);
+	src: url(http://dev.estadaodados.com/gapminder/fonts/Flama/0/Flama-Book.wotf);
 }
 @font-face {
 	font-family: Flama-Black
-	src: url(http://dev.estadaodados.com/gapminder/fonts/FlamaBlack/0/FlamaBlack-Normal.otf);
+	src: url(http://dev.estadaodados.com/gapminder/fonts/FlamaBlack/0/FlamaBlack-Normal.wotf);
 }
 @font-face {
 	font-family: Flama-Bold
-	src: url(http://dev.estadaodados.com/gapminder/fonts/Flama/0/Flama-Bold.otf);
+	src: url(http://dev.estadaodados.com/gapminder/fonts/Flama/0/Flama-Bold.wotf);
 }
 
 @font-face {
 	font-family: Flama-BookItalic
-	src: url(http://dev.estadaodados.com/gapminder/fonts/Flama/0/Flama-BookItalic.otf);
+	src: url(http://dev.estadaodados.com/gapminder/fonts/Flama/0/Flama-BookItalic.wotf);
 }
 
 
