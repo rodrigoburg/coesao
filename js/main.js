@@ -20,7 +20,7 @@ var correcao_grupos = function() {
             return 1;
         }
         controle_circulos += 1;
-        return 4;
+        return 5;
     }
     else if ( controle_circulos >= max_circulos ) {
         controle_circulos += 1;
@@ -42,8 +42,8 @@ var partido_data = {} //variável que mostra quais datas existem para cada parti
 // Escala para raio 
 
 var raioScale = d3.scale.linear()
-	.domain([1,2, 4])
-	.range([4,2, 1]);
+	.domain([1,2, 5])
+	.range([5,2, 1]);
 
 
 // Various accessors that specify the four dimensions of data to visualize.
@@ -58,7 +58,7 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, 4]).range([50, width]),
+var xScale = d3.scale.linear().domain([0, 3.0]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
@@ -254,17 +254,20 @@ d3.json(url, function(nations) {
     function position(dot) {
         dot 
             .transition().duration(100)
-            .attr("cx", function(d) { return xScale(transScale(x(d)) ); })
+            .attr("cx", function(d) { return xScale(transScale( x(d) )) ; } )
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
     	    .attr("fill-opacity", function(d) {
                 raio_grupo = correcao_grupos();
                 var l = transScale(x(d));
-                var opacidade = 1-l/10;
-                opacidade = opacidade/(Math.pow(raio_grupo,2));
-		console.log(opacidade);
-                if (raio_grupo==1) { return  1; }
-                else { return opacidade; }
+                var opacidade = Math.pow((1-l/10),4);
+		if (key(d) == "PMDB") {
+			console.log(key(d));
+			console.log("Inicial", opacidade);
+			console.log((Math.pow(raio_grupo,.01)));
+		}
+                opacidade = opacidade/(Math.pow(raio_grupo,.01));	        
+		return opacidade;
             })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
             .attr("stroke-width", "0")
             .style("visibility", function(d) {
