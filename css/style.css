@@ -139,12 +139,12 @@ text.label  {
 }
 
 .year.label {
-    font: 500 80px "Helvetica Neue";
+    font: 500 80px "Helvetica";
     fill: #ddd;
 }
 
 .governo.label {
-    font: 500 70px "Helvetica Neue";
+    font: 500 70px "Helvetica";
     fill: #ddd;
 }
 .year.label.active {
