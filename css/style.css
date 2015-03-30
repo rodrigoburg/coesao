@@ -7,16 +7,16 @@
 	src: url(/fonts/Flama-Book-webfont.woff);
 }
 @font-face {
-	font-family: Flama-Black
+	font-family: Flama-Black;
 	src: url(/fonts/FlamaBlack-Normal-webfont.woff);
 }
 @font-face {
-	font-family: Flama-Bold
+	font-family: Flama-Bold;
 	src: url(/fonts/Flama-Bold-webfont.woff);
 }
 
 @font-face {
-	font-family: Flama-BookItalic
+	font-family: Flama-BookItalic;
 	src: url(/fonts/Flama-BookItalic-webfont.woff);
 }
 
