@@ -75,7 +75,7 @@ var xAxis = d3.svg.axis().orient("bottom").scale(xScale),
 // Create the SVG container and set the origin.
 var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("height", height + margin.top + margin.bottom+40)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
