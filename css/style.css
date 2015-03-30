@@ -1,3 +1,26 @@
+@font-face {
+	font-family: "Flama-Light"
+	src: url(../fonts/FlamaLight/0/FlamaLight-Normal.otf) format("truetype");
+}
+@font-face {
+	font-family: "Flama-Book"
+	src: url(../fonts/Flama/0/Flama-Book.otf) format("truetype");
+}
+@font-face {
+	font-family: "Flama-Black"
+	src: url(../fonts/FlamaBlack/0/FlamaBlack-Normal.otf) format("truetype");
+}
+@font-face {
+	font-family: "Flama-Bold"
+	src: url(../fonts/Flama/0/Flama-Bold.otf) format("truetype");
+}
+
+@font-face {
+	font-family: "Flama-BookItalic"
+	src: url(../fonts/Flama/0/Flama-BookItalic.otf) format("truetype");
+}
+
+
 @media (min-width: 858px) {
     html.edados {
         font-size: 12px;
