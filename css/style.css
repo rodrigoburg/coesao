@@ -130,19 +130,23 @@ text {
     shape-rendering: crispEdges;
 }
 
-text.label {
+text.label  {
     font-size: 1.3rem;
 
 }
-.label {
+.label, .governo {
     fill: #777;
 }
 
 .year.label {
-    font: 500 120px "Helvetica Neue";
+    font: 500 80px "Helvetica Neue";
     fill: #ddd;
 }
 
+.governo.label {
+    font: 500 70px "Helvetica Neue";
+    fill: #ddd;
+}
 .year.label.active {
     fill: #aaa;
 }

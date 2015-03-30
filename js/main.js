@@ -178,6 +178,14 @@ var label = svg.append("text")
     .attr("x", width)
     .text("fev 2015");
 
+//adiciona o nome do governo
+var governo = svg.append("text")
+    .attr("class","governo label")
+    .attr("text-anchor","end")
+    .attr("y", 50)
+    .attr("x", width)
+    .text("Lula 1");
+
 // Load the data.
 d3.json(url, function(nations) {
     periodo = acha_periodo(nations)
@@ -216,7 +224,7 @@ d3.json(url, function(nations) {
         .call(position)
         .sort(order)
         .on("mouseover", function (d) {            
-            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + transScale(d.variancia).toPrecision(1))
+            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + Math.round(parseFloat(transScale(d.variancia))*10)/10)
             div.style("left", (d3.event.pageX - 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
@@ -331,6 +339,16 @@ d3.json(url, function(nations) {
         var temp = periodo[Math.floor(year)];
         var ano = temp.split("-")[0]
         var mes = traducao_mes[temp.split("-")[1]]
+        //aruma o label do governo
+        if (ano < 2007) {
+            governo.text("Lula 1")
+        } else if (ano < 2011) {
+            governo.text("Lula 2")
+        } else if (ano < 2015) {
+            governo.text("Dilma 1")
+        } else {
+            governo.text("Dilma 2")
+        }
         return mes + " " + ano
     }
 // Interpolates the dataset for the given (fractional) year.
