@@ -77,13 +77,21 @@ var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom+40)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    .on("touch", function (d) { //tira tooltip se clicar em algum lugar do svg
-        alert("ERA PRA FUNCIONAR")
-        div.transition()
-            .duration(400)
-            .style("opacity", 0);
-})
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//cria um retangulo vazio para clicar e a tooltip sumir
+    svg.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width)
+        .attr("height", height)
+        .style("opacity", 0)
+        .on("touch", function (d) { //tira tooltip se clicar em algum lugar do svg
+            alert("ERA PRA FUNCIONAR")
+            div.transition()
+                .duration(400)
+                .style("opacity", 0);
+        });
 
 // variável que guarda os meses e perdidos que estão nos dados
 var periodo = []
