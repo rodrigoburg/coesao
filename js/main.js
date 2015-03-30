@@ -269,12 +269,7 @@ d3.json(url, function(nations) {
                 raio_grupo = correcao_grupos();
                 var l = transScale(x(d));
                 var opacidade = Math.pow((1-l/10),4);
-		if (key(d) == "PMDB") {
-			console.log(key(d));
-			console.log("Inicial", opacidade);
-			console.log((Math.pow(raio_grupo,.01)));
-		}
-                opacidade = opacidade/(Math.pow(raio_grupo,.01));	        
+                opacidade = opacidade/(Math.pow(raio_grupo,.01));
 		return opacidade;
             })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
             .attr("stroke-width", "0")
