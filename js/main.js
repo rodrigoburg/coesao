@@ -77,7 +77,12 @@ var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom+40)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .on("touch", function (d) { //tira tooltip se clicar em algum lugar do svg
+        div.transition()
+            .duration(400)
+            .style("opacity", 0);
+})
 
 // variável que guarda os meses e perdidos que estão nos dados
 var periodo = []
