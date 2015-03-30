@@ -166,6 +166,9 @@ svg.append("g")
     .attr("class", "y axis")
     .call(yAxis);
 
+//tira eixo y
+$($("path")[1]).hide()
+
 // Add an x-axis label.
 svg.append("text")
     .attr("class", "axis")
@@ -201,6 +204,7 @@ var governo = svg.append("text")
 
 // Load the data.
 d3.json(url, function(nations) {
+
     periodo = acha_periodo(nations)
     partidos = acha_partidos(nations)
     partidos_selecionados = partidos
@@ -431,6 +435,7 @@ d3.json(url, function(nations) {
     }
 
     adiciona_partidos()
+
 });
 
 //função para o menu de partidos
