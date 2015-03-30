@@ -87,7 +87,6 @@ var svg = d3.select("#chart").append("svg")
         .attr("height", height)
         .style("opacity", 0)
         .on("click", function (d) { //tira tooltip se clicar em algum lugar do svg
-            alert("ERA PRA FUNCIONAR")
             div.transition()
                 .duration(400)
                 .style("opacity", 0);
@@ -275,7 +274,7 @@ d3.json(url, function(nations) {
 // Positions the dots based on data.
     function position(dot) {
         dot 
-            .transition().duration(100)
+            .transition().duration(120)
             .attr("cx", function(d) { return xScale(transScale( x(d) )) ; } )
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
