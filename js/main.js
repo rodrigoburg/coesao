@@ -54,7 +54,7 @@ function key(d) { return d.name; }
 
 // Chart dimensions.
 var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
-    width = 960 - margin.right,
+    width = 900 - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
@@ -314,7 +314,6 @@ d3.json(url, function(nations) {
         }
 
         function mouseout() {
-            dragging = false;
             label.classed("active", false);
         }
 
