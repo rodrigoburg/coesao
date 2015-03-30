@@ -86,7 +86,7 @@ var svg = d3.select("#chart").append("svg")
         .attr("width", width)
         .attr("height", height)
         .style("opacity", 0)
-        .on("touch", function (d) { //tira tooltip se clicar em algum lugar do svg
+        .on("click", function (d) { //tira tooltip se clicar em algum lugar do svg
             alert("ERA PRA FUNCIONAR")
             div.transition()
                 .duration(400)
