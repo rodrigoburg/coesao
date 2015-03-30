@@ -28,7 +28,7 @@
     }
 }
 html.edados {
-    width: 960px;
+    width: 900px;
 }
 
 p.linhafina {
@@ -48,7 +48,7 @@ p.explicacao {
   font-family: "PT Serif", serif;
   margin: 1em auto 4em auto;
   position: relative;
-  width: 880px;
+  width: 90%;
 }
 
 h1.titulo {
