@@ -1,23 +1,23 @@
 @font-face {
 	font-family: Flama-Light;
-	src: url(/fonts/FlamaLight-Normal-webfont.wotf);
+	src: url(/fonts/FlamaLight-Normal-webfont.woff);
 }
 @font-face {
 	font-family: Flama-Book;
-	src: url(/fonts/Flama-Book-webfont.wotf);
+	src: url(/fonts/Flama-Book-webfont.woff);
 }
 @font-face {
 	font-family: Flama-Black
-	src: url(/fonts/FlamaBlack-Normal-webfont.wotf);
+	src: url(/fonts/FlamaBlack-Normal-webfont.woff);
 }
 @font-face {
 	font-family: Flama-Bold
-	src: url(/fonts/Flama-Bold-webfont.wotf);
+	src: url(/fonts/Flama-Bold-webfont.woff);
 }
 
 @font-face {
 	font-family: Flama-BookItalic
-	src: url(/fonts/Flama-BookItalic-webfont.wotf);
+	src: url(/fonts/Flama-BookItalic-webfont.woff);
 }
 
 
