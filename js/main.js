@@ -37,7 +37,7 @@ var max_circulos; // número máximo de círculos
 var raio_grupo;
 var ano;
 var partido_data = {} //variável que mostra quais datas existem para cada partido
-
+var dragging = false
 
 // Escala para raio 
 
@@ -155,7 +155,7 @@ svg.append("g")
 
 // Add an x-axis label.
 svg.append("text")
-    .attr("class", "x label")
+    .attr("class", "axis")
     .attr("text-anchor", "end")
     .attr("x", width)
     .attr("y", height - 6)
@@ -163,7 +163,7 @@ svg.append("text")
 
 // Add a y-axis label.
 svg.append("text")
-    .attr("class", "y label")
+    .attr("class", "axis")
     .attr("text-anchor", "end")
     .attr("y", 6)
     .attr("dy", ".75em")
@@ -250,7 +250,7 @@ d3.json(url, function(nations) {
         .attr("y", box.y)
         .attr("width", box.width)
         .attr("height", box.height)
-        .on("mouseover", enableInteraction);
+        .on("click", enableInteraction);
 
 // Start a transition that interpolates the data based on year.
     svg.transition()
@@ -296,24 +296,40 @@ d3.json(url, function(nations) {
             .clamp(true);
 
 // Cancel the current transition, if any.
-        svg.transition().duration(5000).ease("linear");
+        svg.transition().duration(3000).ease("linear");
 
         overlay
+            .on("touchstart",mousedown)
+            .on("touchmove",mousemove)
+            .on("touchend",mouseout)
+            .on("touchleave",mouseout)
             .on("mouseover", mouseover)
             .on("mouseout", mouseout)
-            .on("mousemove", mousemove)
-            .on("touchmove", mousemove);
+            .on("mousedown",mousedown)
+            .on("mouseup",mouseup)
+            .on("mousemove",mousemove);
 
         function mouseover() {
             label.classed("active", true);
         }
 
         function mouseout() {
+            dragging = false;
             label.classed("active", false);
         }
 
+        function mousedown() {
+            dragging = true;
+        }
+
+        function mouseup() {
+            dragging = false;
+        }
+
         function mousemove() {
-            displayYear(yearScale.invert(d3.mouse(this)[0]));
+            if (dragging == true) {
+                displayYear(yearScale.invert(d3.mouse(this)[0]));
+            }
         }
     }
 
