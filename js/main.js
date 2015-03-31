@@ -58,13 +58,13 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, 3.0]).range([50, width]),
+var xScale = d3.scale.linear().domain([0, 6.0]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
 // Cria escala para dispersão
 var transScale = d3.scale.linear()
-	.domain([0,50])
+	.domain([0,25])
 	.range([0,10]);
 
 
