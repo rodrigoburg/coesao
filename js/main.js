@@ -2,6 +2,17 @@
  * Created by rodrigoburg on 23/03/15.
  */
 
+/*
+Quando criar o seletor, lembrar de setar valor_seletor (indica o índice - dispersao ou nao) 
+
+e controle_seletor ( indica se o axis já foi construído)
+
+
+
+*/
+
+
+
 var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
 url = "data/variancia_camara.json"
 
@@ -66,20 +77,33 @@ var seletor_x = {
 
 var controle_seletor = 1;
 
+function altera_seletor_x(valor_seletor) {
+    controle_seletor = 1;
+    valor_seletor = valor_seletor;
+} // função inutil - retirar depois
+
+
 function seleciona(d) {
     switch(valor_seletor) {
-        case 1:
-            max_valor_xscale = 6.0;
-            return(xScale(dispScale( x(d) )));
-        case 4:
-            if ( controle_seletor == 1 ) {
-                min_valor_xscale = 20;
-                max_valor_xscale = 100;
-                adiciona_xaxis();
-                controle_seletor = 0;
-            }
-            return(xScale(y(d))); 
-    }
+                   case 1:
+                        if ( controle_seletor == 1 ) {
+                            min_valor_xscale = 0.0;
+                            max_valor_xscale = 6.0;
+                            adiciona_xaxis();
+                            $(".texto_x").text("índice de dispersão");
+                            controle_seletor = 0;
+                        }
+                        return(xScale(dispScale( x(d) )));
+                    case 4:
+                        if ( controle_seletor == 1 ) {
+                            min_valor_xscale = 20;
+                            max_valor_xscale = 100;
+                            adiciona_xaxis();
+                            $(".texto_x").text("índice de governismo");
+                            controle_seletor = 0;
+                        }
+                        return(xScale(y(d))); 
+                }
 }
 
 
@@ -147,7 +171,7 @@ var traducao_mes = {
     "12":"dez"
 }
 
-var valor_seletor = 4;
+var valor_seletor = 1;
 
 
 var paleta = {
@@ -213,7 +237,7 @@ $($("path")[1]).hide()
 
 // Add an x-axis label.
 svg.append("text")
-    .attr("class", "axis")
+    .attr("class", "axis texto_x")
     .attr("text-anchor", "end")
     .attr("x", width)
     .attr("y", height - 6)
@@ -221,7 +245,7 @@ svg.append("text")
 
 // Add a y-axis label.
 svg.append("text")
-    .attr("class", "axis")
+    .attr("class", "axis texto_y")
     .attr("text-anchor", "end")
     .attr("y", 6)
     .attr("dy", ".75em")
@@ -322,9 +346,8 @@ d3.json(url, function(nations) {
     function position(dot) {
         dot 
             .transition().duration(100)
-            .attr("cx", function(d) {
-                controle_seletor = 1;
-            return(seleciona(d)); } )
+            .attr("cx", function(d) { 
+               return(seleciona(d)); } )
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
     	    .attr("fill-opacity", function(d) {
