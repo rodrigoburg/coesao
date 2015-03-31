@@ -1,33 +1,159 @@
 
 <!DOCTYPE html>
-<html class="edados">
-<meta charset="utf-8">
-<title>Governismo e coesão dos partidos</title>
-<link href="css/style.css" rel="stylesheet">
-<link href="css/bootstrap-theme.min.css" rel="stylesheet">
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<html lang="pt-br" class="edados">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+
+    <title>Governismo e coesão dos partidos - Estadão Dados</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index">
+    <meta name="creator" content="José Roberto Toledo">
+    <meta name="creator" content="Rodrigo Burgarelli">
+    <meta name="creator" content="Guilherme Duarte">
+    <meta name="creator" content="Estadão Dados">
+    <meta name="creator" content="Estadão.com.br">
+    <meta property="og:site_name" content="Estadão Dados">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- meta tags específicas de cada projeto -->
+    <meta name="author" content="Rodrigo Burgarelli & Guilherme Duarte"> <!-- A pessoa responsável pelo desenvolvimento deste arquivo -->
+    <meta name="DC.creator " content="Rodrigo Burgarelli & Guilherme Duarte"> <!-- Desenvolvedor da página -->
+    <meta name="DC.creator.address" content="rodrigo.burgarelli1@gmail.com"> <!-- email do autor da página -->
+
+    <!-- O nome desta aplicação -->
+
+    <meta name="application-name" content="Governismo e coesão dos partidos">
+    <meta property="og:title" content="Governismo e coesão dos partidos">
+
+
+    <!-- Descrição curta e precisa do conteúdo desta página -->
+
+    <meta name="description" content="Apoio ao governo e coerência interna das bancadas se transforma com o tempo. #estadaodados">
+    <meta property="og:description" content="Apoio ao governo e coerência interna das bancadas se transforma com o tempo. #estadaodados">
+
+
+    <!-- Palavras reletantes relativas ao conteúdo dessa página. Em formato texto e separadas por vírgula. -->
+
+    <meta name="keywords" content="eleições 2014, doações, financiamento, campanha, dados abertos, opendata, jornalismo de dados, datajournalism">
+
+
+    <meta property="og:url" content="http://estadaodados.com/coesao/"/> <!-- ex: http://estadaodados.com/html/coligacoes/ -->
+
+    <!-- imagem que aparecerá no facebook quando o site for compartilhado -->
+
+    <meta property="og:image" content="http://estadaodados.com/padrinhos/fb.png"/>
+
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.css.map" rel="stylesheet">
+    <link href="css/bootstrap-theme.css.map" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/estadaodados.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="imgs/favicon.png">
+
+</head>
 
 <body>
+<header>
+    <nav class="navbar navbar-fixed-top">
+        <div class="container-fluid" id="navbar-edados">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-edados">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><img src="http://estadaodados.com/base/imgs/logo_estadao_dados.png" id="logo_estadao_dados" title="Estadão Dados"/></a>
+            </div>
+            <div class="navbar-collapse collapse navbar-collapse-edados" id="navbar-collapse-edados">
+                <ul class="nav navbar-nav navbar-edados">
+                    <li class="dropdown active navbar-edados-projetos">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Projetos <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabelProjetos">
+                            <!--START_MENU_ITENS-->
+                            <li role="presentation"><a href="/basometro">Basômetro</a></li>
+                            <li role="presentation"><a href="/biomas2012">Biomas 2012</a></li>
+                            <li role="presentation"><a href="/coligacoes">Coligações</a></li>
+                            <li role="presentation"><a href="/cotas">Cotas</a></li>
+                            <li role="presentation"><a href="/cruzador">Cruzador de Opiniões</a></li>
+                            <li role="presentation"><a href="/eleicoes2012">Eleições 2012</a></li>
+                            <li role="presentation"><a href="/ideb">IDEB</a></li>
+                            <li role="presentation"><a href="/intencaodevoto">Intenção de Voto</a></li>
+                            <li role="presentation"><a href="/perfil_eleitorado">Perfil do Eleitorado</a></li>
+                            <li role="presentation"><a href="/piramide_eleitoral">Pirâmide Eleitoral</a></li>
+                            <li role="presentation"><a href="/quespvcquer">Que SP vc quer?</a></li>
+                            <li role="presentation"><a href="/religiao">Religiões</a></li>
+                            <li role="presentation"><a href="/ringue2014">Ringue 2014</a></li>
+                            <li role="presentation"><a href="/santamaria">Santa Maria</a></li>
+                            <li role="presentation"><a href="/saopauloquebalanca">São Paulo que balança</a></li>
+                            <li role="presentation"><a href="/doacoes2014">Siga o dinheiro</a></li>
+                            <!--END_MENU_ITENS-->
+                        </ul>
+                    </li>
+                    <li><a href="http://blog.estadaodados.com">Blog</a></li>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            Estadão
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" role="menuEstadao" aria-labelledby="dLabelEstadao">
+                            <li><a href="http://politica.estadao.com.br/" target="_top" title="POLÍTICA">Política</a></li>
+                            <li><a href="http://economia.estadao.com.br/" target="_top" title="ECONOMIA">Economia</a></li>
+                            <li><a href="http://esportes.estadao.com.br/" target="_top" title="ESPORTES">Esportes</a></li>
+                            <li><a href="http://blogs.estadao.com.br/link/" target="_top" title="LINK">Link</a></li>
+                            <li><a href="http://rta-se.estadao.com.br/" target="_top" title="DIVIRTA-SE">Divirta-se</a></li>
+                            <li><a href="http://pme.estadao.com.br/" target="_top" title="PME">PME</a></li>
+                            <li><a href="http://www.estadao.com.br/jornal-do-carro" target="_top" title="JORNAL DO CARRO">Jornal do Carro</a></li>
+                            <li><a href="http://www.estadao.com.br/opiniao/" target="_top" title="OPINIÃO">Opinião</a></li>
+                            <li><a href="http://acervo.estadao.com.br/" target="_top" title="ACERVO">Acervo</a></li>
+                            <li><a href="http://radio.estadao.com.br/" target="_top" title="RÁDIO">Rádio</a></li>
+                            <li><a href="http://territorioeldorado.limao.com.br" target="_top" title="Eldorado">Eldorado</a></li>
+                            <li><a href="http://revistapiaui.estadao.com.br/" target="_top" title="Piauí">Piauí</a></li>
+                            <li><a href="http://www.broadcastpolitico.com.br/experimente/" target="_top" title="Broadcast Político">Broadcast Político</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav> <!-- Fim da barra de navegação do Estadão Dados -->
+</header>
 <h1 class="titulo">Governismo e coesão dos partidos</h1>
 <p class="linhafina">Apoio ao governo e coerência interna das bancadas se transforma com o tempo</p>
 <p class="explicacao">Cada círculo representa um partido. Quanto mais alto ele estiver no gráfico, mais governista está a sigla. Quanto mais à direita, menos coesa é a bancada, ou seja, há mais deputados votando de maneira oposta dentro da messma sigla. O diâmetro dos círculos é proporcional ao número de deputados. Passe o cursor sobre a data para ver a evolução através do tempo.</p>
-<div id="partidos">
-    <div class="btn-group" role="group" aria-label="...">
-        <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                Partidos para selecionar
-                <span class="caret"></span>
-            </button>
-            <ul id="partNSelecionados" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-            </ul>
+<div class="container_partidos_sociais">
+    <div id="partidos" class="col-xs-11">
+        <div class="btn-group" role="group" aria-label="...">
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    Partidos para selecionar
+                    <span class="caret"></span>
+                </button>
+                <ul id="partNSelecionados" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    Partidos já selecionados
+                    <span class="caret"></span>
+                </button>
+                <ul id="partSelecionados" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                </ul>
+            </div>
         </div>
-        <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                Partidos já selecionados
-                <span class="caret"></span>
-            </button>
-            <ul id="partSelecionados" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-            </ul>
+    </div>
+    <div class="col-xs-1 pull-right social-sharing visible-sm visible-md visible-lg">
+        <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
+            <a class="addthis_button_twitter"></a>
+            <a class="addthis_button_facebook"></a>
         </div>
     </div>
 </div>
@@ -39,4 +165,22 @@
 <script src="js/jquery-2.1.0.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/main.js"></script>
-</body></html>
+
+<br/>
+<br/>
+<footer class="col-xs-12 text-center">
+    <p>Guilherme Duarte, José Roberto de Toledo e Rodrigo Burgarelli</p>
+    <p><b>Grupo Estado</b> • Copyright © 2007-2015 • <a href="https://creativecommons.org/licenses/by-sa/3.0/br/">Alguns direitos reservados (CC-By-SA)</a></p>
+</footer>
+
+
+<!-- AddThis Button BEGIN -->
+<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53751e9e65674220"></script>
+<!-- AddThis Button END -->
+
+<!-- google analytics -->
+<script language="javascript" type="text/javascript" src="js/edados_analytics.js"></script>
+
+</body>
+</html>
