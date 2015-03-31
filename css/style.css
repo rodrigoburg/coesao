@@ -62,7 +62,7 @@ p.linhafina {
 }
 
 p.explicacao {
-    font-size:1.3rem;
+    font-size:1.4rem;
     text-align: justify;
 }
 
@@ -216,4 +216,18 @@ div.tooltip {
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+}
+
+p.nota {
+    font-family: "Flama-Book";
+    font-size:1.5rem;
+    color:steelblue;
+}
+
+.tecnica {
+    opacity:0
+}
+
+.nota:hover .tecnica {
+    opacity:1
 }

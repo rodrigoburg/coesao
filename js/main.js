@@ -81,10 +81,10 @@ var svg = d3.select("#chart").append("svg")
 
 //cria um retangulo vazio para clicar e a tooltip sumir
     svg.append("rect")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", width)
-        .attr("height", height)
+        .attr("x", -30)
+        .attr("y", -30)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom -20)
         .style("opacity", 0)
         .on("click", function (d) { //tira tooltip se clicar em algum lugar do svg
             div.transition()
@@ -269,11 +269,12 @@ d3.json(url, function(nations) {
         .attr("height", box.height+100)
         .on("click", enableInteraction);
 
-// Start a transition that interpolates the data based on year.
+// começo da transição para explicar o gráfico.
     svg.transition()
         .duration(5000).ease("linear")
         .tween("year", tweenYear)
         .each("end", enableInteraction	);
+
 
 // Positions the dots based on data.
     function position(dot) {
