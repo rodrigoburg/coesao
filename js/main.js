@@ -46,11 +46,38 @@ var raioScale = d3.scale.linear()
 	.range([5,2, 1]);
 
 
+var max_valor_xscale = 6.0;
+
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.variancia; }
 function y(d) { return d.governismo; }
 function radius(d) { return d.num_deputados; }
 function key(d) { return d.name; }
+function rice(d) { return d.rice; }
+
+var seletor_x = {
+    1: "dispersao",
+    2: "rice",
+    3: "rice-corrigido",
+    4: "governismo"
+}
+
+
+
+function seleciona(valor , d) {
+    console.log(valor);
+    switch(valor) {
+        case 1:
+            max_valor_xscale = 6.0;
+            return(xScale(dispScale( x(d) )));
+        case 4:
+            max_valor_scale = 100;
+            xScale = d3.scale.linear().domain([0, max_valor_xscale]).range([50, width])
+            return(y(d)); 
+    }
+}
+
+
 
 // Chart dimensions.
 var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
@@ -58,12 +85,12 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, 6.0]).range([50, width]),
+var xScale = d3.scale.linear().domain([0, max_valor_xscale]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
 // Cria escala para dispersão
-var transScale = d3.scale.linear()
+var dispScale = d3.scale.linear()
 	.domain([0,25])
 	.range([0,10]);
 
@@ -113,6 +140,9 @@ var traducao_mes = {
     "11":"nov",
     "12":"dez"
 }
+
+var valor_seletor = 1;
+
 
 var paleta = {
     PTC:'#A11217',
@@ -241,7 +271,7 @@ d3.json(url, function(nations) {
         .call(position)
         .sort(order)
         .on("mouseover", function (d) {            
-            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + Math.round(parseFloat(transScale(d.variancia))*10)/10)
+            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + Math.round(parseFloat(dispScale(d.variancia))*10)/10)
             div.style("left", (d3.event.pageX - 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
@@ -280,12 +310,14 @@ d3.json(url, function(nations) {
     function position(dot) {
         dot 
             .transition().duration(100)
-            .attr("cx", function(d) { return xScale(transScale( x(d) )) ; } )
+            .attr("cx", function(d) {
+            console.log(seleciona(valor_seletor, d));
+            return(seleciona(valor_seletor,d)); } )
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
     	    .attr("fill-opacity", function(d) {
                 raio_grupo = correcao_grupos();
-                var l = transScale(x(d));
+                var l = dispScale(x(d));
                 var opacidade = Math.pow((1-l/10),4);
                 opacidade = opacidade/(Math.pow(raio_grupo,.01));
 		return opacidade;
