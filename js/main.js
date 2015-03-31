@@ -5,10 +5,10 @@
 var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
 url = "data/variancia_camara.json"
 
+//div da tooltip
 var div = d3.select("body").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
-
 
 // função para poder executar uma correção para cada grupo de círculos
 // Retorna um valor para cada grupo. 1, para o grupo 1; 2, para o grupo 2; 4, para o grupo 3.
@@ -504,3 +504,24 @@ function coloca_partido(sigla) {
 function tira_partido(sigla) {
     $("circle[partido='"+sigla.trim()+"']").hide()
 }
+
+tecnica = d3.select("#tecnica")
+
+//coloca hover na tooltip
+d3.select("#nota")
+    .on("mouseover", function (d) {
+        tecnica.style("left", (d3.event.pageX - 50) + "px")
+                .style("top", (d3.event.pageY - 120) + "px")
+        tecnica.transition()
+            .duration(300)
+            .style("display", "block");
+    })
+    .on('mousemove', function(d) {
+        tecnica.style("left", (d3.event.pageX - 50) + "px")
+                .style("top", (d3.event.pageY - 120) + "px");
+    })
+    .on("mouseout", function(d) {
+        tecnica.transition()
+            .duration(400)
+            .style("display", "none");
+    });

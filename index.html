@@ -123,7 +123,7 @@
 </header>
 <h1 class="titulo">Governismo e coesão dos partidos</h1>
 <p class="linhafina">Apoio ao governo e coerência interna das bancadas se transforma com o tempo</p>
-<p class="explicacao">Cada círculo representa um partido. Quanto mais alto ele estiver no gráfico, mais governista está a sigla. Quanto mais à direita, menos coesa é a bancada, ou seja, há mais deputados votando de maneira oposta dentro da messma sigla. O diâmetro dos círculos é proporcional ao número de deputados. Passe o cursor sobre a data para ver a evolução através do tempo.</p>
+<p class="explicacao">Cada círculo representa um partido. Quanto mais alto ele estiver no gráfico, mais governista está a sigla. Quanto mais à direita, menos coesa é a bancada, ou seja, há mais deputados votando de maneira oposta dentro da messma sigla. O diâmetro dos círculos é proporcional ao número de deputados. Clique sobre a data e arraste para ver a evolução através do tempo.</p>
 <div class="container_partidos_sociais">
     <div id="partidos" class="col-xs-11">
         <div class="btn-group" role="group" aria-label="...">
@@ -156,24 +156,23 @@
     <p id="chart"></p>
 </div>
 
-<script src="js/d3.v3.min.js"></script>
-<script src="js/jquery-2.1.0.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/main.js"></script>
-
 <br/>
 <br/>
-<p class="nota">* Para entender o índice, passe o mouse aqui.</p>
-<div class="tecnica">
-    <p>Índice Estadão Dados de dispersão parlamentar - O cálculo do índice tem duas partes. Na primeira, calcula-se a variação entre os votos "sim" (valem 1) e votos "não" (valem 0).  Suponha que todos os deputados de um partido votem "sim" (ou votem "não"): a variação será 0. Já, se metade vota "sim" e metade vota "não", a variação máxima será 0,25.</p>
-    <p>Na segunda etapa do cálculo, os valores da variação são convertidos para uma escala de 0 a 10. Até agora, nenhum partido ultrapassou o valor de 6, por isso, no infográfico, o eixo horizontal termina em 6,0.</p>
-</div>
+<p id="nota">* Para entender o índice de dispersão, passe o mouse aqui.</p>
+<span id="tecnica">O cálculo do Índice Estadão Dados de dispersão parlamentar tem duas partes. Na primeira, calcula-se a variação entre os votos "sim" (valem 1) e votos "não" (valem 0).  Suponha que todos os deputados de um partido votem "sim" (ou votem "não"): a variação será 0. Já, se metade vota "sim" e metade vota "não", a variação máxima será 0,25.
+Na segunda etapa do cálculo, os valores da variação são convertidos para uma escala de 0 a 10. Até agora, nenhum partido ultrapassou o valor de 6, por isso, no infográfico, o eixo horizontal termina em 6,0.
+</span>
 
 <footer class="col-xs-12 text-center">
     <p>Guilherme Duarte, José Roberto de Toledo e Rodrigo Burgarelli</p>
     <p><b>Grupo Estado</b> • Copyright © 2007-2015 • <a href="https://creativecommons.org/licenses/by-sa/3.0/br/">Alguns direitos reservados (CC-By-SA)</a></p>
 </footer>
 
+
+<script src="js/d3.v3.min.js"></script>
+<script src="js/jquery-2.1.0.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
 
 <!-- AddThis Button BEGIN -->
 <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
