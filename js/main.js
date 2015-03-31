@@ -47,6 +47,7 @@ var raioScale = d3.scale.linear()
 
 
 var max_valor_xscale = 6.0;
+var min_valor_xscale = 0.0;
 
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.variancia; }
@@ -63,19 +64,24 @@ var seletor_x = {
 }
 
 
+var controle_seletor = 1;
 
-function seleciona(valor , d) {
-    console.log(valor);
-    switch(valor) {
+function seleciona(d) {
+    switch(valor_seletor) {
         case 1:
             max_valor_xscale = 6.0;
             return(xScale(dispScale( x(d) )));
         case 4:
-            max_valor_scale = 100;
-            xScale = d3.scale.linear().domain([0, max_valor_xscale]).range([50, width])
-            return(y(d)); 
+            if ( controle_seletor == 1 ) {
+                min_valor_xscale = 20;
+                max_valor_xscale = 100;
+                adiciona_xaxis();
+                controle_seletor = 0;
+            }
+            return(xScale(y(d))); 
     }
 }
+
 
 
 
@@ -85,7 +91,7 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([0, max_valor_xscale]).range([50, width]),
+var xScale = d3.scale.linear().domain([min_valor_xscale, max_valor_xscale]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
@@ -141,7 +147,7 @@ var traducao_mes = {
     "12":"dez"
 }
 
-var valor_seletor = 1;
+var valor_seletor = 4;
 
 
 var paleta = {
@@ -186,11 +192,17 @@ var paleta = {
 
 
 // Add the x-axis.
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+function adiciona_xaxis() {
+        $(".x").remove();
+        xScale = d3.scale.linear().domain([min_valor_xscale, max_valor_xscale]).range([50, width]);     
+        xAxis = d3.svg.axis().orient("bottom").scale(xScale);
+        svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+}
 
+adiciona_xaxis();
 // Add the y-axis.
 svg.append("g")
     .attr("class", "y axis")
@@ -311,8 +323,8 @@ d3.json(url, function(nations) {
         dot 
             .transition().duration(100)
             .attr("cx", function(d) {
-            console.log(seleciona(valor_seletor, d));
-            return(seleciona(valor_seletor,d)); } )
+                controle_seletor = 1;
+            return(seleciona(d)); } )
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
     	    .attr("fill-opacity", function(d) {
