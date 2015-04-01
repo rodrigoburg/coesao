@@ -67,43 +67,40 @@ function radius(d) { return d.num_deputados; }
 function key(d) { return d.name; }
 function rice(d) { return d.rice; }
 
+
+
 var seletor_x = {
-    1: "dispersao",
-    2: "rice",
-    3: "rice-corrigido",
-    4: "governismo"
+    "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return xScale( dispScale( x(d) ) ) ; }],
+    "rice": [],
+    "rice-corrigido": [],
+    "governismo":[ 20, 100, "índice de governismo", function(d) { return xScale(y(d)); } ]
 }
+padrao_seletor_x = "governismo";
 
 
 var controle_seletor = 1;
-
-function altera_seletor_x(valor_seletor) {
-    controle_seletor = 1;
-    valor_seletor = valor_seletor;
-} // função inutil - retirar depois
-
-
-function seleciona(d) {
-    switch(valor_seletor) {
-                   case 1:
-                        if ( controle_seletor == 1 ) {
-                            min_valor_xscale = 0.0;
-                            max_valor_xscale = 6.0;
-                            adiciona_xaxis();
-                            $(".texto_x").text("índice de dispersão");
-                            controle_seletor = 0;
-                        }
-                        return(xScale(dispScale( x(d) )));
-                    case 4:
-                        if ( controle_seletor == 1 ) {
-                            min_valor_xscale = 20;
-                            max_valor_xscale = 100;
-                            adiciona_xaxis();
-                            $(".texto_x").text("índice de governismo");
-                            controle_seletor = 0;
-                        }
-                        return(xScale(y(d))); 
-                }
+// Add the x-axis.
+function adiciona_xaxis() {
+	$(".x").remove();
+        xScale = d3.scale.linear().domain([min_valor_xscale, max_valor_xscale]).range([50, width]);     
+        xAxis = d3.svg.axis().orient("bottom").scale(xScale);
+        svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+}
+function seleciona(d, escala_x) {
+	console.log("teste");
+	if ( controle_seletor == 1 ) {
+		console.log("teste");
+	        min_valor_xscale = seletor_x[escala_x][0];
+		console.log(seletor_x[escala_x][2]);
+	        max_valor_xscale = seletor_x[escala_x][1];
+                adiciona_xaxis();
+                $(".texto_x").text(seletor_x[escala_x][2]);		
+                controle_seletor = 0;
+	}		
+	return seletor_x[escala_x][3](d);        
 }
 
 
@@ -215,16 +212,6 @@ var paleta = {
 
 
 
-// Add the x-axis.
-function adiciona_xaxis() {
-        $(".x").remove();
-        xScale = d3.scale.linear().domain([min_valor_xscale, max_valor_xscale]).range([50, width]);     
-        xAxis = d3.svg.axis().orient("bottom").scale(xScale);
-        svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-}
 
 adiciona_xaxis();
 // Add the y-axis.
@@ -347,7 +334,7 @@ d3.json(url, function(nations) {
         dot 
             .transition().duration(100)
             .attr("cx", function(d) { 
-               return(seleciona(d)); } )
+               return(seleciona(d, padrao_seletor_x)); } )
             .attr("cy", function(d) { return yScale(y(d)); })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
     	    .attr("fill-opacity", function(d) {
