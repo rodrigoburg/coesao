@@ -83,29 +83,6 @@ var seletor_x = {
     "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
 }
 
-// Add the x-axis.
-function adiciona_xaxis() {
-        $(".texto_x").text(seletor_x[x_padrao][2]);		
-	$(".x").remove();
-        xScale = d3.scale.linear().domain([seletor_x[x_padrao][0], seletor_x[x_padrao][1]]).range([50, width]);     
-        xAxis = d3.svg.axis().orient("bottom").scale(xScale);
-        svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-}
-
-function adiciona_yaxis() {
-        $(".texto_y").text(seletor_x[y_padrao][2]);		
-	$(".y").remove();
-        yScale = d3.scale.linear().domain([seletor_x[y_padrao][0], seletor_x[y_padrao][1]]).range([height, 0]);     
-        yAxis = d3.svg.axis().scale(yScale).orient("left");
-      	svg.append("g")
-    	.attr("class", "y axis")
-    	.call(yAxis);
-
-}
-
 
 
 function seleciona(d, padrao) {
@@ -219,50 +196,75 @@ var paleta = {
 
 
 
-adiciona_xaxis();
-// Add the y-axis.
-svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis);
-
-//tira eixo y
-$($("path")[1]).hide()
-
-// Add an x-axis label.
-svg.append("text")
-    .attr("class", "axis texto_x")
-    .attr("text-anchor", "end")
-    .attr("x", width - 35)
-    .attr("y", height - 6)
-    .text("índice de dispersão");
-
-// Add a y-axis label.
-svg.append("text")
-    .attr("class", "axis texto_y")
-    .attr("text-anchor", "end")
-    .attr("y",6)
-    .attr("dy", ".75em")
-    .attr("transform", "rotate(-90)")
-    .text("índice de governismo");
-
-// Add the year label; the value is set on transition.
-var label = svg.append("text")
-    .attr("class", "year label")
-    .attr("text-anchor", "end")
-    .attr("y", height - 24)
-    .attr("x", width)
-    .text("fev 2015");
-
-//adiciona o nome do governo
-var governo = svg.append("text")
-    .attr("class","governo label")
-    .attr("text-anchor","end")
-    .attr("y", 50)
-    .attr("x", width)
-    .text("Lula 1");
 
 // Load the data.
 d3.json(url, function(nations) {
+
+    // Add the x-axis.
+    function adiciona_xaxis() {
+        $(".texto_x").text(seletor_x[x_padrao][2]);
+        $(".x").remove();
+        xScale = d3.scale.linear().domain([seletor_x[x_padrao][0], seletor_x[x_padrao][1]]).range([50, width]);
+        xAxis = d3.svg.axis().orient("bottom").scale(xScale);
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+    }
+
+    function adiciona_yaxis() {
+        $(".texto_y").text(seletor_x[y_padrao][2]);
+        $(".y").remove();
+        yScale = d3.scale.linear().domain([seletor_x[y_padrao][0], seletor_x[y_padrao][1]]).range([height, 0]);
+        yAxis = d3.svg.axis().scale(yScale).orient("left");
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+    }
+
+    adiciona_xaxis();
+// Add the y-axis.
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+//tira eixo y
+    $($("path")[1]).hide()
+
+// Add an x-axis label.
+    svg.append("text")
+        .attr("class", "axis texto_x")
+        .attr("text-anchor", "end")
+        .attr("x", width - 35)
+        .attr("y", height - 6)
+        .text("índice de dispersão");
+
+// Add a y-axis label.
+    svg.append("text")
+        .attr("class", "axis texto_y")
+        .attr("text-anchor", "end")
+        .attr("y",6)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("índice de governismo");
+
+// Add the year label; the value is set on transition.
+    var label = svg.append("text")
+        .attr("class", "year label")
+        .attr("text-anchor", "end")
+        .attr("y", height - 24)
+        .attr("x", width)
+        .text("fev 2015");
+
+//adiciona o nome do governo
+    var governo = svg.append("text")
+        .attr("class","governo label")
+        .attr("text-anchor","end")
+        .attr("y", 50)
+        .attr("x", width)
+        .text("Lula 1");
+
+    coloca_botoes()
 
     periodo = acha_periodo(nations)
     partidos = acha_partidos(nations)
@@ -338,8 +340,6 @@ d3.json(url, function(nations) {
 // Positions the dots based on data.
     function position(dot) {
         dot 
-	    .call(adiciona_xaxis)
-	    .call(adiciona_yaxis)
             .transition().duration(100)
             .attr("cx", function(d) { 
                return(xScale(seleciona(d, x_padrao))); } )
@@ -499,6 +499,86 @@ d3.json(url, function(nations) {
 
     adiciona_partidos()
 
+    function coloca_botoes() {
+        //botao
+        var botao_x = $( "#eixo_x" )
+            .button({
+                icons: { primary: "ui-icon-carat-1-s"}
+            })
+            .css("height","18px")
+            .css("width","35px")
+            .position({
+                my:"left+10",
+                at:"right",
+                of:".texto_x"
+            })
+            .click(function (){
+                if ($("#caixa_eixo_x").css("display") == "block") {
+                    $("#caixa_eixo_x").css("display","none")
+                } else {
+                    $("#caixa_eixo_x").css("display","block")
+                }
+
+            });
+
+        var caixa_x = $('#caixa_eixo_x')
+            .addClass('ui-corner-all ui-widget')
+            .position({
+                my:"right top-12",
+                at:"right bottom",
+                of:"#eixo_x"
+            });
+
+        var botao_y = $( "#eixo_y" )
+            .button({
+                icons: { primary: "ui-icon-carat-1-e"}
+            })
+            .css({height:"19px",width:"30px"})
+            .position({
+                my:"center bottom-5",
+                at:"left top",
+                of:".texto_y"
+            })
+            .click(function (){
+                if ($("#caixa_eixo_y").css("display") == "block") {
+                    $("#caixa_eixo_y").css("display","none")
+                } else {
+                    $("#caixa_eixo_y").css("display","block")
+                }
+
+            });
+
+        var caixa_y = $('#caixa_eixo_y')
+            .addClass('ui-corner-all ui-widget')
+            .position({
+                my:"right top",
+                at:"right top",
+                of:"#eixo_y"
+            });
+
+
+        for(var key in seletor_x) {
+            caixa_x.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
+            caixa_y.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
+        }
+
+        $("li")
+            .on("click",function (){
+                if ($(this).parent().attr("id") == "caixa_eixo_x") {
+                    x_padrao = $(this).attr("id")
+                    adiciona_xaxis()
+                    $("#caixa_eixo_x").css("display","none")
+                    dot.call(position)
+                } else {
+                    y_padrao = $(this).attr("id")
+                    adiciona_yaxis()
+                    $("#caixa_eixo_y").css("display","none")
+                    dot.call(position)
+                }
+            }
+        )
+    }
+
 });
 
 //função para o menu de partidos
@@ -588,81 +668,4 @@ d3.select("#nota")
             .style("display", "none");
     });
 
-function coloca_botoes() {
-    //botao
-    var botao_x = $( "#eixo_x" )
-        .button({
-            icons: { primary: "ui-icon-carat-1-s"}
-        })
-        .css("height","18px")
-        .css("width","35px")
-        .position({
-            my:"left+10",
-            at:"right",
-            of:".texto_x"
-        })
-        .click(function (){
-            if ($("#caixa_eixo_x").css("display") == "block") {
-                $("#caixa_eixo_x").css("display","none")
-            } else {
-                $("#caixa_eixo_x").css("display","block")
-            }
-
-        });
-
-     var caixa_x = $('#caixa_eixo_x')
-        .addClass('ui-corner-all ui-widget')
-        .position({
-            my:"right top-12",
-            at:"right bottom",
-            of:"#eixo_x"
-        });
-
-    var botao_y = $( "#eixo_y" )
-        .button({
-            icons: { primary: "ui-icon-carat-1-e"}
-        })
-        .css({height:"19px",width:"30px"})
-        .position({
-            my:"center bottom-5",
-            at:"left top",
-            of:".texto_y"
-        })
-        .click(function (){
-            if ($("#caixa_eixo_y").css("display") == "block") {
-                $("#caixa_eixo_y").css("display","none")
-            } else {
-                $("#caixa_eixo_y").css("display","block")
-            }
-
-        });
-
-    var caixa_y = $('#caixa_eixo_y')
-        .addClass('ui-corner-all ui-widget')
-        .position({
-            my:"right top",
-            at:"right top",
-            of:"#eixo_y"
-        });
-
-
-    for(var key in seletor_x) {
-        caixa_x.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
-        caixa_y.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
-    }
-
-    $("li")
-        .on("click",function (){
-            if ($(this).parent().attr("id") == "caixa_eixo_x") {
-                x_padrao = $(this).attr("id")
-                adiciona_xaxis()
-                $("#caixa_eixo_x").css("display","none")
-            } else {
-                y_padrao = $(this).attr("id")
-                adiciona_yaxis()
-                $("#caixa_eixo_y").css("display","none")
-            }
-        })}
-
-coloca_botoes()
 
