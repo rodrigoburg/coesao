@@ -79,7 +79,8 @@ var seletor_x = {
     "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
     "rice": [],
     "rice-corrigido": [],
-    "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ]
+    "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
+    "n-parlamentares": [ 0, 100, "número de parlamentares", function(d) { radius(d); } ]
 }
 
 // Add the x-axis.
@@ -348,7 +349,7 @@ d3.json(url, function(nations) {
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
     	    .attr("fill-opacity", function(d) {
                 raio_grupo = correcao_grupos();
-                var l = dispScale(x(d));
+                var l = dispScale(seleciona(d, x_padrao) );
                 var opacidade = Math.pow((1-l/10),4);
                 opacidade = opacidade/(Math.pow(raio_grupo,.01));
 		return opacidade;
