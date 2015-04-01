@@ -80,7 +80,7 @@ var seletor_x = {
     "rice": [],
     "rice-corrigido": [],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
-    "n-parlamentares": [ 0, 100, "número de parlamentares", function(d) { radius(d); } ]
+    "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { radius(d); } ]
 }
 
 // Add the x-axis.
@@ -620,7 +620,7 @@ function coloca_botoes() {
 
     $("li")
         .on("click",function (){
-            padrao_x = $(this).attr("id")
+            x_padrao = $(this).attr("id")
             adiciona_xaxis()
             $("#caixa_eixo_x").css("display","none")
         })
