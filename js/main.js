@@ -112,8 +112,6 @@ function seleciona(d, padrao) {
 }
 
 
-
-
 // Chart dimensions.
 var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     width = 900 - margin.right,
@@ -588,3 +586,44 @@ d3.select("#nota")
             .duration(400)
             .style("display", "none");
     });
+
+function coloca_botoes() {
+    //botao
+    $( "#eixo_x" )
+        .button({
+            icons: { primary: "ui-icon-carat-1-s"}
+        })
+        .css("height","20px")
+        .css("width","35px")
+        .position({
+            my:"left",
+            at:"right",
+            of:".texto_x"
+        })
+        .click(function (){
+            $("#caixa_eixo_x").css("display","block")
+        });
+
+     var caixa = $('#caixa_eixo_x')
+        .addClass('ui-corner-all ui-widget')
+        .position({
+            my:"right top",
+            at:"left bottom",
+            of:"#eixo_x"
+        });
+
+    for(var key in seletor_x) {
+        caixa.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
+    }
+
+
+    $("li")
+        .on("click",function (){
+            padrao_x = $(this).attr("id")
+            adiciona_xaxis()
+            $("#caixa_eixo_x").css("display","none")
+        })
+}
+
+coloca_botoes()
+

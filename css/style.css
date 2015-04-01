@@ -250,3 +250,33 @@ p#nota {
     pointer-events: none;
 }
 
+#caixa_eixo_x
+{
+    display: none;
+    list-style-type: none;
+    padding: 5px;
+    margin: 0;
+    border: 1px solid #DCDCDC;
+    background-color: #fff;
+    position: absolute;
+    width:200px;
+}
+
+#caixa_eixo_x li{
+
+    margin: 0;
+    width: auto;
+    border: 1px solid #fff;
+    font-family: "Flama-Light";
+    font-size:1.4rem;
+}
+#caixa_eixo_x li:hover
+{
+    cursor: pointer;
+    background-color: #DCDCDC;
+}
+#caixa_eixo_x li a
+{
+    text-transform: none;
+}
+
