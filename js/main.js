@@ -590,19 +590,24 @@ d3.select("#nota")
 
 function coloca_botoes() {
     //botao
-    $( "#eixo_x" )
+    var botao_x = $( "#eixo_x" )
         .button({
             icons: { primary: "ui-icon-carat-1-s"}
         })
-        .css("height","30px")
-        .css("width","30px")
+        .css("height","20px")
+        .css("width","15px")
         .position({
             my:"left",
             at:"right",
             of:".texto_x"
         })
         .click(function (){
-            $("#caixa_eixo_x").css("display","block")
+            if ($("#caixa_eixo_x").css("display") == "block") {
+                $("#caixa_eixo_x").css("display","none")
+            } else {
+                $("#caixa_eixo_x").css("display","block")
+            }
+
         });
 
      var caixa_x = $('#caixa_eixo_x')
@@ -613,7 +618,7 @@ function coloca_botoes() {
             of:"#eixo_x"
         });
 
-    $( "#eixo_y" )
+    var botao_y = $( "#eixo_y" )
         .button({
             icons: { primary: "ui-icon-carat-1-e"}
         })
@@ -625,7 +630,12 @@ function coloca_botoes() {
             of:".texto_y"
         })
         .click(function (){
-            $("#caixa_eixo_y").css("display","block")
+            if ($("#caixa_eixo_y").css("display") == "block") {
+                $("#caixa_eixo_y").css("display","none")
+            } else {
+                $("#caixa_eixo_y").css("display","block")
+            }
+
         });
 
     var caixa_y = $('#caixa_eixo_y')
@@ -635,6 +645,31 @@ function coloca_botoes() {
             at:"left bottom",
             of:"#eixo_y"
         });
+
+    //acerta_posicao das caixas e botões
+    botao_x.css("top", function (d) {
+        var temp =$(this).css("top").replace("px","")
+        return temp -1;
+
+    })
+    botao_x.css("left", function (d) {
+        var temp =$(this).css("left").replace("px","")
+        console.log(temp)
+        return temp-39;
+
+    })
+    caixa_x.css("top", function (d) {
+        var temp =$(this).css("top").replace("px","")
+        return temp -12;
+
+    })
+    caixa_x.css("left", function (d) {
+        var temp =$(this).css("left").replace("px","")
+        return temp -24;
+
+    })
+
+
 
     for(var key in seletor_x) {
         caixa_x.append("<li id="+key+">"+seletor_x[key][2]+"</li>")

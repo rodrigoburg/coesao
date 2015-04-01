@@ -280,4 +280,10 @@ p#nota {
     text-transform: none;
 }
 
+.seletor {
+    display:table-cell !important;
+    vertical-align: middle  !important;
+    text-align: center !important;
+}
+
 
