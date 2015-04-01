@@ -77,7 +77,7 @@ function rice(d) { return d.rice; }
 
 var seletor_x = {
     "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
-    "rice": [ 0.0, 1.0, "índice de rice", function(d) { console.log(d); return rice(d); } ],
+    "rice": [ 0.0, 1.0, "índice de rice", function(d) { return rice(d); } ],
     "rice-corrigido": [],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
     "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
@@ -469,10 +469,15 @@ d3.json(url, function(nations) {
 
     function acha_periodo(dados) {
         var saida = []
-        dados[0].governismo.forEach(function (d) {
-            saida.push(d[0])
+        dados.forEach(function (e) {
+            if (e.name == "PT") {
+                e.governismo.forEach(function (d) {
+                    saida.push(d[0])
+                })
+            }
         })
         return saida
+
     }
 
     function acha_partidos(dados) {
