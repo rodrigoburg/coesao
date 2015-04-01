@@ -12,6 +12,14 @@ e controle_seletor ( indica se o axis já foi construído)
 */
 
 
+/* Preciso destas */
+var x_padrao;
+var y_padrao;
+var raio_padrao;
+var transparencia_padrao;
+
+
+
 
 var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
 url = "data/variancia_camara.json"
