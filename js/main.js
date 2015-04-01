@@ -77,10 +77,10 @@ function rice(d) { return d.rice; }
 
 var seletor_x = {
     "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
-    "rice": [],
+    "rice": [ 0.0, 1.0, "índice de rice", function(d) { console.log(d); return rice(d); } ],
     "rice-corrigido": [],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
-    "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { radius(d); } ]
+    "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
 }
 
 // Add the x-axis.
