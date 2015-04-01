@@ -232,7 +232,7 @@ $($("path")[1]).hide()
 svg.append("text")
     .attr("class", "axis texto_x")
     .attr("text-anchor", "end")
-    .attr("x", width)
+    .attr("x", width - 50)
     .attr("y", height - 6)
     .text("índice de dispersão");
 
@@ -653,9 +653,9 @@ function coloca_botoes() {
 
     })
     botao_x.css("left", function (d) {
-        var temp =$(this).css("left").replace("px","")
+        var temp =Math.round($(this).css("left").replace("px",""))
         console.log(temp)
-        return temp-39;
+        return temp + 10;
 
     })
     caixa_x.css("top", function (d) {
@@ -664,8 +664,8 @@ function coloca_botoes() {
 
     })
     caixa_x.css("left", function (d) {
-        var temp =$(this).css("left").replace("px","")
-        return temp -24;
+        var temp = Math.round($(this).css("left").replace("px",""))
+        return temp +24;
 
     })
 
