@@ -13,10 +13,10 @@ e controle_seletor ( indica se o axis já foi construído)
 
 
 /* Preciso destas */
-var x_padrao;
-var y_padrao;
-var raio_padrao;
-var transparencia_padrao;
+var x_padrao = "dispersão";
+var y_padrao = "governismo";
+var raio_padrao = "n-parlamentares";
+var transparencia_padrao = "dispersão";
 
 
 
@@ -343,7 +343,7 @@ d3.json(url, function(nations) {
             .transition().duration(100)
             .attr("cx", function(d) { 
                return(seleciona(d, padrao_seletor_x)); } )
-            .attr("cy", function(d) { return yScale(y(d)); })
+            .attr("cy", function(d) { seleciona(d, padrao_seletor_y })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
     	    .attr("fill-opacity", function(d) {
                 raio_grupo = correcao_grupos();
