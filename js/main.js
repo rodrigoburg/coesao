@@ -594,8 +594,8 @@ function coloca_botoes() {
         .button({
             icons: { primary: "ui-icon-carat-1-s"}
         })
-        .css("height","20px")
-        .css("width","35px")
+        .css("height","30px")
+        .css("width","30px")
         .position({
             my:"left",
             at:"right",
@@ -605,7 +605,7 @@ function coloca_botoes() {
             $("#caixa_eixo_x").css("display","block")
         });
 
-     var caixa = $('#caixa_eixo_x')
+     var caixa_x = $('#caixa_eixo_x')
         .addClass('ui-corner-all ui-widget')
         .position({
             my:"right top",
@@ -613,18 +613,46 @@ function coloca_botoes() {
             of:"#eixo_x"
         });
 
-    for(var key in seletor_x) {
-        caixa.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
-    }
+    $( "#eixo_y" )
+        .button({
+            icons: { primary: "ui-icon-carat-1-e"}
+        })
+        .css("height","30px")
+        .css("width","30px")
+        .position({
+            my:"top",
+            at:"left",
+            of:".texto_y"
+        })
+        .click(function (){
+            $("#caixa_eixo_y").css("display","block")
+        });
 
+    var caixa_y = $('#caixa_eixo_y')
+        .addClass('ui-corner-all ui-widget')
+        .position({
+            my:"right top",
+            at:"left bottom",
+            of:"#eixo_y"
+        });
+
+    for(var key in seletor_x) {
+        caixa_x.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
+        caixa_y.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
+    }
 
     $("li")
         .on("click",function (){
-            x_padrao = $(this).attr("id")
-            adiciona_xaxis()
-            $("#caixa_eixo_x").css("display","none")
-        })
-}
+            if ($(this).parent().attr("id") == "caixa_eixo_x") {
+                x_padrao = $(this).attr("id")
+                adiciona_xaxis()
+                $("#caixa_eixo_x").css("display","none")
+            } else {
+                y_padrao = $(this).attr("id")
+                adiciona_yaxis()
+                $("#caixa_eixo_y").css("display","none")
+            }
+        })}
 
 coloca_botoes()
 

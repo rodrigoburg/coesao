@@ -250,7 +250,7 @@ p#nota {
     pointer-events: none;
 }
 
-#caixa_eixo_x
+.caixa
 {
     display: none;
     list-style-type: none;
@@ -262,7 +262,7 @@ p#nota {
     width:200px;
 }
 
-#caixa_eixo_x li{
+.caixa li{
 
     margin: 0;
     width: auto;
@@ -270,13 +270,14 @@ p#nota {
     font-family: "Flama-Light";
     font-size:1.4rem;
 }
-#caixa_eixo_x li:hover
+.caixa li:hover
 {
     cursor: pointer;
     background-color: #DCDCDC;
 }
-#caixa_eixo_x li a
+.caixa li a
 {
     text-transform: none;
 }
+
 
