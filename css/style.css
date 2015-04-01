@@ -281,9 +281,12 @@ p#nota {
 }
 
 .seletor {
-    display:table-cell !important;
     vertical-align: middle  !important;
     text-align: center !important;
 }
 
+.ui-icon {
+    vertical-align: middle  !important;
+    text-align: center !important;
+}
 

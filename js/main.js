@@ -232,7 +232,7 @@ $($("path")[1]).hide()
 svg.append("text")
     .attr("class", "axis texto_x")
     .attr("text-anchor", "end")
-    .attr("x", width - 50)
+    .attr("x", width - 35)
     .attr("y", height - 6)
     .text("índice de dispersão");
 
@@ -240,7 +240,7 @@ svg.append("text")
 svg.append("text")
     .attr("class", "axis texto_y")
     .attr("text-anchor", "end")
-    .attr("y", 6)
+    .attr("y",6)
     .attr("dy", ".75em")
     .attr("transform", "rotate(-90)")
     .text("índice de governismo");
@@ -594,8 +594,8 @@ function coloca_botoes() {
         .button({
             icons: { primary: "ui-icon-carat-1-s"}
         })
-        .css("height","20px")
-        .css("width","15px")
+        .css("height","18px")
+        .css("width","35px")
         .position({
             my:"left",
             at:"right",
@@ -622,7 +622,7 @@ function coloca_botoes() {
         .button({
             icons: { primary: "ui-icon-carat-1-e"}
         })
-        .css("height","30px")
+        .css("height","19px")
         .css("width","30px")
         .position({
             my:"top",
@@ -647,11 +647,21 @@ function coloca_botoes() {
         });
 
     //acerta_posicao das caixas e botões
-    botao_x.css("top", function (d) {
+    botao_y.css("top", function (d) {
         var temp =$(this).css("top").replace("px","")
-        return temp -1;
+        return temp -30;
 
     })
+    caixa_y.css("top", function (d) {
+        var temp =$(this).css("top").replace("px","")
+        return temp -65;
+    })
+
+    caixa_y.css("left", function (d) {
+        var temp =$(this).css("left").replace("px","")
+        return temp -25;
+    })
+
     botao_x.css("left", function (d) {
         var temp =Math.round($(this).css("left").replace("px",""))
         console.log(temp)
@@ -668,8 +678,6 @@ function coloca_botoes() {
         return temp +24;
 
     })
-
-
 
     for(var key in seletor_x) {
         caixa_x.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
