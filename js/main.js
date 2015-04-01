@@ -597,7 +597,7 @@ function coloca_botoes() {
         .css("height","18px")
         .css("width","35px")
         .position({
-            my:"left",
+            my:"left+10",
             at:"right",
             of:".texto_x"
         })
@@ -613,8 +613,8 @@ function coloca_botoes() {
      var caixa_x = $('#caixa_eixo_x')
         .addClass('ui-corner-all ui-widget')
         .position({
-            my:"right top",
-            at:"left bottom",
+            my:"right top-12",
+            at:"right bottom",
             of:"#eixo_x"
         });
 
@@ -622,11 +622,10 @@ function coloca_botoes() {
         .button({
             icons: { primary: "ui-icon-carat-1-e"}
         })
-        .css("height","19px")
-        .css("width","30px")
+        .css({height:"19px",width:"30px"})
         .position({
-            my:"top",
-            at:"left",
+            my:"center bottom-5",
+            at:"left top",
             of:".texto_y"
         })
         .click(function (){
@@ -642,42 +641,10 @@ function coloca_botoes() {
         .addClass('ui-corner-all ui-widget')
         .position({
             my:"right top",
-            at:"left bottom",
+            at:"right top",
             of:"#eixo_y"
         });
 
-    //acerta_posicao das caixas e botões
-    botao_y.css("top", function (d) {
-        var temp =$(this).css("top").replace("px","")
-        return temp -30;
-
-    })
-    caixa_y.css("top", function (d) {
-        var temp =$(this).css("top").replace("px","")
-        return temp -65;
-    })
-
-    caixa_y.css("left", function (d) {
-        var temp =$(this).css("left").replace("px","")
-        return temp -25;
-    })
-
-    botao_x.css("left", function (d) {
-        var temp =Math.round($(this).css("left").replace("px",""))
-        console.log(temp)
-        return temp + 10;
-
-    })
-    caixa_x.css("top", function (d) {
-        var temp =$(this).css("top").replace("px","")
-        return temp -12;
-
-    })
-    caixa_x.css("left", function (d) {
-        var temp = Math.round($(this).css("left").replace("px",""))
-        return temp +24;
-
-    })
 
     for(var key in seletor_x) {
         caixa_x.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
