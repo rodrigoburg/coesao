@@ -13,7 +13,7 @@ e controle_seletor ( indica se o axis já foi construído)
 
 
 /* Preciso destas */
-var x_padrao = "dispersão";
+var x_padrao = "dispersao";
 var y_padrao = "governismo";
 var raio_padrao = "n-parlamentares";
 var transparencia_padrao = "dispersão";
@@ -65,8 +65,6 @@ var raioScale = d3.scale.linear()
 	.range([5,2, 1]);
 
 
-var max_valor_xscale = 6.0;
-var min_valor_xscale = 0.0;
 
 // Various accessors that specify the four dimensions of data to visualize.
 function x(d) { return d.variancia; }
@@ -78,37 +76,39 @@ function rice(d) { return d.rice; }
 
 
 var seletor_x = {
-    "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return xScale( dispScale( x(d) ) ) ; }],
+    "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
     "rice": [],
     "rice-corrigido": [],
-    "governismo":[ 20, 100, "índice de governismo", function(d) { return xScale(y(d)); } ]
+    "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ]
 }
-padrao_seletor_x = "governismo";
 
-
-var controle_seletor = 1;
 // Add the x-axis.
 function adiciona_xaxis() {
+        $(".texto_x").text(seletor_x[x_padrao][2]);		
 	$(".x").remove();
-        xScale = d3.scale.linear().domain([min_valor_xscale, max_valor_xscale]).range([50, width]);     
+        xScale = d3.scale.linear().domain([seletor_x[x_padrao][0], seletor_x[x_padrao][1]]).range([50, width]);     
         xAxis = d3.svg.axis().orient("bottom").scale(xScale);
         svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 }
-function seleciona(d, escala_x) {
-	console.log("teste");
-	if ( controle_seletor == 1 ) {
-		console.log("teste");
-	        min_valor_xscale = seletor_x[escala_x][0];
-		console.log(seletor_x[escala_x][2]);
-	        max_valor_xscale = seletor_x[escala_x][1];
-                adiciona_xaxis();
-                $(".texto_x").text(seletor_x[escala_x][2]);		
-                controle_seletor = 0;
-	}		
-	return seletor_x[escala_x][3](d);        
+
+function adiciona_yaxis() {
+        $(".texto_y").text(seletor_x[y_padrao][2]);		
+	$(".y").remove();
+        yScale = d3.scale.linear().domain([seletor_x[y_padrao][0], seletor_x[y_padrao][1]]).range([height, 0]);     
+        yAxis = d3.svg.axis().scale(yScale).orient("left");
+      	svg.append("g")
+    	.attr("class", "y axis")
+    	.call(yAxis);
+
+}
+
+
+
+function seleciona(d, padrao) {
+	return seletor_x[padrao][3](d);        
 }
 
 
@@ -120,7 +120,7 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     height = 500 - margin.top - margin.bottom;
 
 // Various scales. These domains make assumptions of data, naturally.
-var xScale = d3.scale.linear().domain([min_valor_xscale, max_valor_xscale]).range([50, width]),
+var xScale = d3.scale.linear().domain([seletor_x[x_padrao][0], seletor_x[x_padrao][1]]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
@@ -176,7 +176,6 @@ var traducao_mes = {
     "12":"dez"
 }
 
-var valor_seletor = 1;
 
 
 var paleta = {
@@ -340,10 +339,12 @@ d3.json(url, function(nations) {
 // Positions the dots based on data.
     function position(dot) {
         dot 
+	    .call(adiciona_xaxis)
+	    .call(adiciona_yaxis)
             .transition().duration(100)
             .attr("cx", function(d) { 
-               return(seleciona(d, padrao_seletor_x)); } )
-            .attr("cy", function(d) { seleciona(d, padrao_seletor_y })
+               return(xScale(seleciona(d, x_padrao))); } )
+            .attr("cy", function(d) { return yScale(seleciona(d, y_padrao)); })
             .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(radius(d)/raioScale(raio_grupo))); })
     	    .attr("fill-opacity", function(d) {
                 raio_grupo = correcao_grupos();
