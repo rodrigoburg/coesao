@@ -302,7 +302,7 @@ d3.json(url, function(nations) {
         .call(position)
         .sort(order)
         .on("mouseover", function (d) {
-            var html = "<b>"+d.name + "</b></br>"+seletor_x[x_padrao][2]+": " + d[x_padrao] + "</br>"+seletor_x[y_padrao][2]+": " + Math.round(d[y_padrao]*10)/10
+            var html = "<b>"+d.name + "</b></br>"+seletor_x[x_padrao][2]+": " + seleciona(d, x_padrao) + "</br>"+seletor_x[y_padrao][2]+": " + Math.round(seleciona(d, y_padrao)*10)/10
             div.html(html)
             div.style("left", (d3.event.pageX - 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
