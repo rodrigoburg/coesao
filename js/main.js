@@ -67,7 +67,7 @@ var raioScale = d3.scale.linear()
 
 
 // Various accessors that specify the four dimensions of data to visualize.
-function x(d) { return d.variancia; }
+function x(d) { return d.dispersao; }
 function y(d) { return d.governismo; }
 function radius(d) { return d.num_deputados; }
 function key(d) { return d.name; }
@@ -301,8 +301,9 @@ d3.json(url, function(nations) {
         .style("stroke", function(d) { return paleta[d.name]; })
         .call(position)
         .sort(order)
-        .on("mouseover", function (d) {            
-            div.html("<b>"+d.name + "</b></br>Governismo: " + d.governismo + "%</br>Dispersão: " + Math.round(parseFloat(dispScale(d.variancia))*10)/10)
+        .on("mouseover", function (d) {
+            var html = "<b>"+d.name + "</b></br>"+seletor_x[x_padrao][2]+": " + d[x_padrao] + "</br>"+seletor_x[y_padrao][2]+": " + Math.round(d[y_padrao]*10)/10
+            div.html(html)
             div.style("left", (d3.event.pageX - 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
             div.transition()
@@ -394,6 +395,7 @@ d3.json(url, function(nations) {
         }
 
         function mouseout() {
+            dragging=false;
             label.classed("active", false);
         }
 
@@ -453,7 +455,7 @@ d3.json(url, function(nations) {
             return {
                 name: d.name,
                 governismo: interpolateValues(d.governismo, year),
-                variancia: interpolateValues(d.variancia, year),
+                dispersao: interpolateValues(d.dispersao, year),
                 num_deputados: interpolateValues(d.num_deputados, year),
                 rice: interpolateValues(d.rice, year)
             };
