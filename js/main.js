@@ -77,7 +77,7 @@ function rice(d) { return d.rice; }
 
 var seletor_x = {
     "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
-    "rice": [ 0.0, 1.0, "índice de rice", function(d) { return rice(d); } ],
+    "rice": [ 0.0, 100.0, "índice de rice", function(d) { return rice(d); } ],
     "rice-corrigido": [],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
     "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
@@ -454,7 +454,8 @@ d3.json(url, function(nations) {
                 name: d.name,
                 governismo: interpolateValues(d.governismo, year),
                 variancia: interpolateValues(d.variancia, year),
-                num_deputados: interpolateValues(d.num_deputados, year)
+                num_deputados: interpolateValues(d.num_deputados, year),
+                rice: interpolateValues(d.rice, year)
             };
         });
         return(a)
