@@ -71,13 +71,13 @@ function x(d) { return d.dispersao; }
 function y(d) { return d.governismo; }
 function radius(d) { return d.num_deputados; }
 function key(d) { return d.name; }
-function rice(d) { return d.rice; }
+function rice(d) { return(d.rice/100); }
 
 
 
 var seletor_x = {
     "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
-    "rice": [ 0.0, 100.0, "índice de rice", function(d) { return rice(d); } ],
+    "rice": [ 1.0, 0.3, "índice de rice", function(d) { return rice(d); } ],
     "rice-corrigido": [],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
     "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
