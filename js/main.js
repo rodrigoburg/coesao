@@ -72,13 +72,13 @@ function y(d) { return d.governismo; }
 function radius(d) { return d.num_deputados; }
 function key(d) { return d.name; }
 function rice(d) { return(d.rice/100); }
-
+function lider(d) { console.log(d.fidelidade_lider); return d.fidelidade_lider; }
 
 
 var seletor_x = {
     "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
     "rice": [ 1.0, 0.3, "índice de rice", function(d) { return rice(d); } ],
-    "rice-corrigido": [],
+    "fidelidade_lider": [ 0, 100, "fidelidade ao líder", function(d) { return lider(d);} ],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
     "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
 }
@@ -457,7 +457,8 @@ d3.json(url, function(nations) {
                 governismo: interpolateValues(d.governismo, year),
                 dispersao: interpolateValues(d.dispersao, year),
                 num_deputados: interpolateValues(d.num_deputados, year),
-                rice: interpolateValues(d.rice, year)
+                rice: interpolateValues(d.rice, year),
+		fidelidade_lider: interpolateValues(d.rice, year) // corrigir, nao está lendo fidelidade_lider no json
             };
         });
         return(a)
