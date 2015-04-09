@@ -20,7 +20,6 @@ var transparencia_padrao = "dispersão";
 
 
 
-
 var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
 url = "data/variancia_camara.json"
 
@@ -78,7 +77,7 @@ function lider(d) { console.log(d.fidelidade_lider); return d.fidelidade_lider; 
 var seletor_x = {
     "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
     "rice": [ 1.0, 0.3, "índice de rice", function(d) { return rice(d); } ],
-    "fidelidade_lider": [ 0, 100, "fidelidade ao líder", function(d) { return lider(d);} ],
+    "fidelidade_lider": [ 80, 100, "fidelidade ao líder", function(d) { return lider(d);} ],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
     "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
 }
@@ -458,7 +457,7 @@ d3.json(url, function(nations) {
                 dispersao: interpolateValues(d.dispersao, year),
                 num_deputados: interpolateValues(d.num_deputados, year),
                 rice: interpolateValues(d.rice, year),
-		fidelidade_lider: interpolateValues(d.rice, year) // corrigir, nao está lendo fidelidade_lider no json
+		        fidelidade_lider: interpolateValues(d.fidelidade_lider, year)
             };
         });
         return(a)
@@ -466,6 +465,9 @@ d3.json(url, function(nations) {
 
 // Finds (and possibly interpolates) the value for the specified year.
     function interpolateValues(values, year) {
+        if (values.length == 0) {
+            return [] //retorna vazio se não tiver dado para esse período
+        }
         var i = bisect.left(values, year, 0, values.length - 1),
             a = values[i];
         return a[1];
@@ -656,9 +658,9 @@ function tira_partido(sigla) {
     $("circle[partido='"+sigla.trim()+"']").hide()
 }
 
+//coloca hover na tooltip da nota técnica
 tecnica = d3.select("#tecnica")
 
-//coloca hover na tooltip
 d3.select("#nota")
     .on("mouseover", function (d) {
         tecnica.style("left", (d3.event.pageX - 50) + "px")
