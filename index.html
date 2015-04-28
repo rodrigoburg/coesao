@@ -124,7 +124,7 @@
 </header>
 <h1 class="titulo">Governismo e coesão dos partidos</h1>
 <p class="linhafina">Apoio ao governo e coerência interna das bancadas se transformam com o tempo</p>
-<p class="explicacao">Cada círculo representa um partido. Quanto mais alto ele estiver no gráfico, mais governista estará a sigla. Quanto mais à direita, menos coesa será a bancada, ou seja, haverá mais deputados votando de maneira oposta dentro da mesma sigla. O diâmetro dos círculos é proporcional ao número de deputados. Clique sobre a data e arraste para ver a evolução através do tempo.</p>
+<p class="explicacao">Cada círculo representa um partido. Quanto mais alto ele estiver no gráfico, mais governista estará a sigla. Quanto mais à direita, menos coesa será a bancada, ou seja, haverá mais deputados votando de maneira oposta dentro da mesma sigla. O diâmetro dos círculos é proporcional ao número de deputados. Clique sobre a data e arraste para ver a evolução através do tempo ou construa um novo gráfico selecionando outras variáveis nas setas ao lado dos títulos de cada eixo.</p>
 <div class="container_partidos_sociais">
     <div id="partidos" class="col-xs-11">
         <div class="btn-group" role="group" aria-label="...">
@@ -167,10 +167,43 @@
 
 <br/>
 <br/>
-<p id="nota">* Para entender o índice de dispersão, passe o mouse aqui.</p>
-<span id="tecnica">O cálculo do Índice Estadão Dados de dispersão parlamentar tem duas partes. Na primeira, calcula-se a variação entre os votos "sim" (valem 1) e votos "não" (valem 0).  Suponha que todos os deputados de um partido votem "sim" (ou votem "não"): a variação será 0. Já, se metade vota "sim" e metade vota "não", a variação máxima será 0,25.
-Na segunda etapa do cálculo, os valores da variação são convertidos para uma escala de 0 a 10. Até agora, nenhum partido ultrapassou o valor de 6, por isso, no infográfico, o eixo horizontal termina em 6,0.
-</span>
+<div id="rodapes">
+<p id="topo">Passe o mouse nas variáveis listadas para entender seu cálculo:</p>
+    <ul>
+    <li id="dispersao">
+        <p class="titulo_indice dispersao">Índice de Dispersão</p>
+        <span class="tooltip_indice dispersao">
+            O cálculo do Índice Estadão Dados de dispersão parlamentar tem duas partes. Na primeira, calcula-se a variação entre os votos "sim" (valem 1) e votos "não" (valem 0).  Suponha que todos os deputados de um partido votem "sim" (ou votem "não"): a variação será 0. Já, se metade vota "sim" e metade vota "não", a variação máxima será 0,25.
+            Na segunda etapa do cálculo, os valores da variação são convertidos para uma escala de 0 a 10. Até agora, nenhum partido ultrapassou o valor de 6, por isso, no infográfico, o eixo horizontal termina em 6,0.
+            <br/><br/>Os dados apresentados para cada mês são uma média móvel do mês em questão mais os cinco anteriores. No começo dos mandatos, quando o primeiro semestre ainda não está fechado, a média móvel é calculada apenas para os meses que já se passaram dessa mesma gestão.
+        </span>
+    </li>
+    <li id="governismo">
+        <p class="titulo_indice governismo">Índice de Governismo</p>
+        <span class="tooltip_indice governismo">
+            O índice de governismo do Estadão Dados é calculado com base nos dados do Basômetro, ferramenta interativa que mede o comportamento dos parlamentares em relação à orientação do governo nas votações nominais (estadaodados.com/basometro).
+            Quando um partido apresenta 100% de governismo, isso significa que todos os seus deputados votaram de acordo com a orientação do Executivo em todas as votações nesse período.
+            <br/><br/>Os dados apresentados para cada mês são uma média móvel do mês em questão mais os cinco anteriores. No começo dos mandatos, quando o primeiro semestre ainda não está fechado, a média móvel é calculada apenas para os meses que já se passaram dessa mesma gestão.
+        </span>
+    </li>
+
+    <li id="rice">
+        <p class="titulo_indice rice">Índice de Rice</p>
+        <span class="tooltip_indice rice">
+             O índice de Rice, famoso na literatura acadêmica na ciência política pelos trabalhos do americano Stuart Rice, foi feito especialmente para medir a coesão partidária. Ele representa o valor absoluto da diferença entre o número de votos sim e não para a mesma votação dividido pelo total de votos.
+             Essa variável sempre terá um valor entre 1 e 0. Quanto mais perto de 1, mais coeso é o partido - isto é, há menos votos divergentes e menor dispersão partidária.
+            <br/><br/>Os dados apresentados para cada mês são uma média móvel do mês em questão mais os cinco anteriores. No começo dos mandatos, quando o primeiro semestre ainda não está fechado, a média móvel é calculada apenas para os meses que já se passaram dessa mesma gestão.
+        </span>
+    </li>
+    <li id="fidelidade_lider">
+        <p class="titulo_indice fidelidade">Índice de Fidelidade</p>
+        <span class="tooltip_indice fidelidade">
+            Esta variável revela o grau de fidelidade interna de cada partido em relação à orientação da sua bancada. Assim, em um partido com 100% de fidelidade interna, todos os seus deputados votam seguindo a sua liderança. Votações em que a bancada é liberada para votar como quiser não entram na conta.
+            <br/><br/>Os dados apresentados para cada mês são uma média móvel do mês em questão mais os cinco anteriores. No começo dos mandatos, quando o primeiro semestre ainda não está fechado, a média móvel é calculada apenas para os meses que já se passaram dessa mesma gestão.
+        </span>
+    </li>
+</ul>
+</div>
 
 <footer class="col-xs-12 text-center">
     <p>Guilherme Duarte, José Roberto de Toledo e Rodrigo Burgarelli</p>

@@ -17,7 +17,7 @@ var x_padrao = "dispersao";
 var y_padrao = "governismo";
 var raio_padrao = "num_parlamentares";
 var transparencia_padrao = "dispersão";
-
+var eixos_selecionados = [x_padrao,y_padrao]
 
 
 var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
@@ -73,7 +73,7 @@ function y(d) { return d.governismo; }
 function radius(d) { return d.num_deputados; }
 function key(d) { return d.name; }
 function rice(d) { return(d.rice/100); }
-function lider(d) { console.log(d.fidelidade_lider); return d.fidelidade_lider; }
+function lider(d) { return d.fidelidade_lider; }
 
 
 var seletor_x = {
@@ -238,16 +238,6 @@ var le_planilha = function(d) {
 
 //função que junta os dados do json com os dados do google docs sobre os ministérios
 var junta_dados = function (dados1,dados2) {
-    console.log(dados1)
-    console.log(dados2)
-    console.log(partidos)
-
-    dados2.forEach(function (d) {
-        
-        if (partidos.indexOf(d.sigla) > -1) {
-            console.log(d)
-        }
-    })
     return dados1
 
 }
@@ -358,7 +348,7 @@ var desenha_grafico = function (dados_ministerios) {
             .call(position)
             .sort(order)
             .on("mouseover", function (d) {
-                var html = "<b>"+d.name + "</b></br>"+seletor_x[x_padrao][2]+": " + seleciona(d, x_padrao) + "</br>"+seletor_x[y_padrao][2]+": " + Math.round(seleciona(d, y_padrao)*10)/10
+                var html = "<b>"+d.name + "</b></br>"+seletor_x[x_padrao][2]+": " + Math.round(seleciona(d, x_padrao)*10)/10 + "</br>"+seletor_x[y_padrao][2]+": " + Math.round(seleciona(d, y_padrao)*10)/10
                 div.html(html)
                 div.style("left", (d3.event.pageX - 50) + "px")
                     .style("top", (d3.event.pageY - 50) + "px")
@@ -643,6 +633,9 @@ var desenha_grafico = function (dados_ministerios) {
                         $("#caixa_eixo_y").css("display","none")
                         dot.call(position)
                     }
+                    //atualiza a variável eixos_selecionados pra mudar as tooltips
+                    eixos_selecionados = [x_padrao,y_padrao]
+                    esconde_lista()
                 }
             )
         }
@@ -717,28 +710,49 @@ function tira_partido(sigla) {
     $("circle[partido='"+sigla.trim()+"']").hide()
 }
 
+function esconde_lista() {
+    $("#rodapes").find("li").each(function (a,e) {
+        if (eixos_selecionados.indexOf(e.id) == -1) {
+            $(e).hide()
+        } else {
+            $(e).show()
+        }
+    })
+}
+function coloca_rodapes() {
+    //acha as divs do rodapé e vai colocando hover em uma por uma
+    $("#rodapes").find("li").each(function (a,e) {
+        //as criancas de cada div são o "p" com o nome do índice e o "span" que é a tooltip
+        var criancas = $(e).children()
+        var tecnica = d3.select(criancas[1])
+
+        d3.select(criancas[0])
+            .on("mouseover", function (d) {
+                tecnica.style("left", (d3.event.pageX - 50) + "px")
+                    .style("top", (d3.event.pageY - 120) + "px")
+                tecnica.transition()
+                    .duration(300)
+                    .style("display", "block");
+            })
+            .on('mousemove', function(d) {
+                tecnica.style("left", (d3.event.pageX - 50) + "px")
+                    .style("top", (d3.event.pageY - 120) + "px");
+            })
+            .on("mouseout", function(d) {
+                tecnica.transition()
+                    .duration(400)
+                    .style("display", "none");
+            });
+    })
+
+    //esconde os que não são default
+    esconde_lista()
+}
+
 //roda o script
 baixa_dados()
+coloca_rodapes()
 
-//coloca hover na tooltip da nota técnica
-tecnica = d3.select("#tecnica")
 
-d3.select("#nota")
-    .on("mouseover", function (d) {
-        tecnica.style("left", (d3.event.pageX - 50) + "px")
-                .style("top", (d3.event.pageY - 120) + "px")
-        tecnica.transition()
-            .duration(300)
-            .style("display", "block");
-    })
-    .on('mousemove', function(d) {
-        tecnica.style("left", (d3.event.pageX - 50) + "px")
-                .style("top", (d3.event.pageY - 120) + "px");
-    })
-    .on("mouseout", function(d) {
-        tecnica.transition()
-            .duration(400)
-            .style("display", "none");
-    });
 
 
