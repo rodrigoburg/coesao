@@ -22,6 +22,8 @@ var transparencia_padrao = "dispersão";
 
 var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
 url = "data/variancia_camara.json"
+var url_ministerio = "https://spreadsheets.google.com/feeds/cells/1cR-OkyIUsU3vTw2JiCc9JbyTWvBl2dlzvtSfeTczlx0/3/public/values?alt=json"
+
 
 //div da tooltip
 var div = d3.select("body").append("div")
@@ -193,404 +195,461 @@ var paleta = {
 }
 
 
+//função para baixar os dados dos ministérios
+var baixa_dados = function () {
+    $.getJSON(url_ministerio, function (d) {
+        var dados_ministerios = le_planilha(d)
+        desenha_grafico(dados_ministerios)
+    })
+}
 
+var le_planilha = function(d) {
+    var cells = d.feed.entry; // d são os dados recebidos do Google...
+    var numCells = cells.length;
+    var cellId, cellPos , conteudo;
+    var celulas = {}
+    var titulos = {};
 
+    for(var i=0; i < numCells; i++) {
 
-// Load the data.
-d3.json(url, function(nations) {
+        // lê na string do id a coluna e linha
+        cellId = cells[i].id.$t.split('/');
+        cellPos = cellId[cellId.length - 1].split('C');
+        cellPos[0] = cellPos[0].replace('R', '');
+        conteudo = cells[i].content.$t
 
-    // Add the x-axis.
-    function adiciona_xaxis() {
-        $(".texto_x").text(seletor_x[x_padrao][2]);
-        $(".x").remove();
-        xScale = d3.scale.linear().domain([seletor_x[x_padrao][0], seletor_x[x_padrao][1]]).range([50, width]);
-        xAxis = d3.svg.axis().orient("bottom").scale(xScale);
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+        if (cellPos[0] == "1") {
+            titulos[cellPos[1]] = conteudo
+
+        } else {
+            if (!(cellPos[0] in celulas)) {
+                celulas[cellPos[0]] = {}
+            }
+            celulas[cellPos[0]][titulos[cellPos[1]]] = conteudo
+        }
     }
+    var saida = []
+    for (var key in celulas) {
+        saida.push(celulas[key])
+    }
+    return saida
+}
 
-    function adiciona_yaxis() {
-        $(".texto_y").text(seletor_x[y_padrao][2]);
-        $(".y").remove();
-        yScale = d3.scale.linear().domain([seletor_x[y_padrao][0], seletor_x[y_padrao][1]]).range([height, 0]);
-        yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+//função que junta os dados do json com os dados do google docs sobre os ministérios
+var junta_dados = function (dados1,dados2) {
+    console.log(dados1)
+    console.log(dados2)
+    console.log(partidos)
+
+    dados2.forEach(function (d) {
+        
+        if (partidos.indexOf(d.sigla) > -1) {
+            console.log(d)
+        }
+    })
+    return dados1
+
+}
+// Load the data.
+var desenha_grafico = function (dados_ministerios) {
+    d3.json(url, function(nations) {
+
+        // Add the x-axis.
+        function adiciona_xaxis() {
+            $(".texto_x").text(seletor_x[x_padrao][2]);
+            $(".x").remove();
+            xScale = d3.scale.linear().domain([seletor_x[x_padrao][0], seletor_x[x_padrao][1]]).range([50, width]);
+            xAxis = d3.svg.axis().orient("bottom").scale(xScale);
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+        }
+
+        function adiciona_yaxis() {
+            $(".texto_y").text(seletor_x[y_padrao][2]);
+            $(".y").remove();
+            yScale = d3.scale.linear().domain([seletor_x[y_padrao][0], seletor_x[y_padrao][1]]).range([height, 0]);
+            yAxis = d3.svg.axis().scale(yScale).orient("left");
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
+        }
+
+        adiciona_xaxis();
+// Add the y-axis.
         svg.append("g")
             .attr("class", "y axis")
             .call(yAxis);
-    }
-
-    adiciona_xaxis();
-// Add the y-axis.
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
 
 //tira eixo y
-    $($("path")[1]).hide()
+        $($("path")[1]).hide()
 
 // Add an x-axis label.
-    svg.append("text")
-        .attr("class", "axis texto_x")
-        .attr("text-anchor", "end")
-        .attr("x", width - 35)
-        .attr("y", height - 6)
-        .text("índice de dispersão");
+        svg.append("text")
+            .attr("class", "axis texto_x")
+            .attr("text-anchor", "end")
+            .attr("x", width - 35)
+            .attr("y", height - 6)
+            .text("índice de dispersão");
 
 // Add a y-axis label.
-    svg.append("text")
-        .attr("class", "axis texto_y")
-        .attr("text-anchor", "end")
-        .attr("y",6)
-        .attr("dy", ".75em")
-        .attr("transform", "rotate(-90)")
-        .text("índice de governismo");
+        svg.append("text")
+            .attr("class", "axis texto_y")
+            .attr("text-anchor", "end")
+            .attr("y",6)
+            .attr("dy", ".75em")
+            .attr("transform", "rotate(-90)")
+            .text("índice de governismo");
 
 // Add the year label; the value is set on transition.
-    var label = svg.append("text")
-        .attr("class", "year label")
-        .attr("text-anchor", "end")
-        .attr("y", height - 24)
-        .attr("x", width)
-        .text("fev 2015");
+        var label = svg.append("text")
+            .attr("class", "year label")
+            .attr("text-anchor", "end")
+            .attr("y", height - 24)
+            .attr("x", width)
+            .text("fev 2015");
 
 //adiciona o nome do governo
-    var governo = svg.append("text")
-        .attr("class","governo label")
-        .attr("text-anchor","end")
-        .attr("y", 50)
-        .attr("x", width)
-        .text("Lula 1");
+        var governo = svg.append("text")
+            .attr("class","governo label")
+            .attr("text-anchor","end")
+            .attr("y", 50)
+            .attr("x", width)
+            .text("Lula 1");
 
-    coloca_botoes()
+        coloca_botoes()
 
-    periodo = acha_periodo(nations)
-    partidos = acha_partidos(nations)
-    partidos_selecionados = partidos
-    partido_data = acha_data(nations)
-    
-    //faz um multiplicador que transformará o index de cada partido em um número entre 0 e o total de cores da paleta)
-    var multiplicador = Object.keys(paleta).length/partidos.length
+        periodo = acha_periodo(nations)
+        partidos = acha_partidos(nations)
+        partidos_selecionados = partidos
+        nations = junta_dados(nations, dados_ministerios)
+        partido_data = acha_data(nations)
 
-    for (p in partidos) {
-        var cor = parseInt(p*multiplicador)
-        //após calcular o index novo do partido, adiciona isso numa variável global
-        cores[partidos[p]] = paleta[cor]
-    }
+        //faz um multiplicador que transformará o index de cada partido em um número entre 0 e o total de cores da paleta)
+        var multiplicador = Object.keys(paleta).length/partidos.length
+
+        for (p in partidos) {
+            var cor = parseInt(p*multiplicador)
+            //após calcular o index novo do partido, adiciona isso numa variável global
+            cores[partidos[p]] = paleta[cor]
+        }
 
 // A bisector since many nation's data is sparsely-defined.
-    var bisect = d3.bisector(function(d) { return d[0]; });
-    var tres = [ interpolateData(0), interpolateData(0) , interpolateData(0)];
-    max_circulos = interpolateData(0).length;
+        var bisect = d3.bisector(function(d) { return d[0]; });
+        var tres = [ interpolateData(0), interpolateData(0) , interpolateData(0)];
+        max_circulos = interpolateData(0).length;
 // Add a dot per nation. Initialize the data at 0 (primeiro mês), and set the colors.
-    var grupo = svg.append("g")
-        .attr("class", "grupos")
-        .selectAll("g")
-        .data(tres)
-        .enter().append("g");
+        var grupo = svg.append("g")
+            .attr("class", "grupos")
+            .selectAll("g")
+            .data(tres)
+            .enter().append("g");
 
-    var dot = grupo
-        .selectAll(".dot")
-        .data(function(d, i) { return d; } ) // d is a array[i]
-        .enter().append("circle")
-        .attr("partido", function(d) { return d.name})
-        .attr("class", "dot")
-        .style("fill", function(d, i) { return paleta[d.name]; })
-        .style("stroke", function(d) { return paleta[d.name]; })
-        .call(position)
-        .sort(order)
-        .on("mouseover", function (d) {
-            var html = "<b>"+d.name + "</b></br>"+seletor_x[x_padrao][2]+": " + seleciona(d, x_padrao) + "</br>"+seletor_x[y_padrao][2]+": " + Math.round(seleciona(d, y_padrao)*10)/10
-            div.html(html)
-            div.style("left", (d3.event.pageX - 50) + "px")
-                .style("top", (d3.event.pageY - 50) + "px")
-            div.transition()
-                .duration(300)
-                .style("opacity", 1);
-        })
-        .on('mousemove', function(d) {
-             div.style("left", (d3.event.pageX - 50) + "px")
-                .style("top", (d3.event.pageY - 50) + "px");
-        })
-        .on("mouseout", function(d) {
-            div.transition()
-                .duration(400)
-                .style("opacity", 0);
-        });
+        var dot = grupo
+            .selectAll(".dot")
+            .data(function(d, i) { return d; } ) // d is a array[i]
+            .enter().append("circle")
+            .attr("partido", function(d) { return d.name})
+            .attr("class", "dot")
+            .style("fill", function(d, i) { return paleta[d.name]; })
+            .style("stroke", function(d) { return paleta[d.name]; })
+            .call(position)
+            .sort(order)
+            .on("mouseover", function (d) {
+                var html = "<b>"+d.name + "</b></br>"+seletor_x[x_padrao][2]+": " + seleciona(d, x_padrao) + "</br>"+seletor_x[y_padrao][2]+": " + Math.round(seleciona(d, y_padrao)*10)/10
+                div.html(html)
+                div.style("left", (d3.event.pageX - 50) + "px")
+                    .style("top", (d3.event.pageY - 50) + "px")
+                div.transition()
+                    .duration(300)
+                    .style("opacity", 1);
+            })
+            .on('mousemove', function(d) {
+                div.style("left", (d3.event.pageX - 50) + "px")
+                    .style("top", (d3.event.pageY - 50) + "px");
+            })
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(400)
+                    .style("opacity", 0);
+            });
 
 // Add an overlay for the year label.
-    var box = label.node().getBBox();
+        var box = label.node().getBBox();
 
-    var overlay = svg.append("rect")
-        .attr("class", "overlay")
-        .attr("x", box.x)
-        .attr("y", box.y-40)
-        .attr("width", box.width)
-        .attr("height", box.height+100)
-        .on("click", enableInteraction);
+        var overlay = svg.append("rect")
+            .attr("class", "overlay")
+            .attr("x", box.x)
+            .attr("y", box.y-40)
+            .attr("width", box.width)
+            .attr("height", box.height+100)
+            .on("click", enableInteraction);
 
 // começo da transição para explicar o gráfico.
-    svg.transition()
-        .duration(5000).ease("linear")
-        .tween("year", tweenYear)
-        .each("end", enableInteraction	);
+        svg.transition()
+            .duration(5000).ease("linear")
+            .tween("year", tweenYear)
+            .each("end", enableInteraction	);
 
 
 // Positions the dots based on data.
-    function position(dot) {
-        dot 
-            .transition().duration(100)
-            .attr("cx", function(d) { 
-               return(xScale(seleciona(d, x_padrao))); } )
-            .attr("cy", function(d) { return yScale(seleciona(d, y_padrao)); })
-            .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(seleciona(d, raio_padrao)/raioScale(raio_grupo))); })
-    	    .attr("fill-opacity", function(d) {
-                raio_grupo = correcao_grupos();
-                var l = dispScale(seleciona(d, x_padrao) );
-                var opacidade = Math.pow((1-l/10),4);
-                opacidade = opacidade/(Math.pow(raio_grupo,.01));
-		return opacidade;
-            })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
-            .attr("stroke-width", "0")
-            .style("visibility", function(d) {
-                return aparece(d)
-            });
-    }
+        function position(dot) {
+            dot
+                .transition().duration(100)
+                .attr("cx", function(d) {
+                    return(xScale(seleciona(d, x_padrao))); } )
+                .attr("cy", function(d) { return yScale(seleciona(d, y_padrao)); })
+                .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(seleciona(d, raio_padrao)/raioScale(raio_grupo))); })
+                .attr("fill-opacity", function(d) {
+                    raio_grupo = correcao_grupos();
+                    var l = dispScale(seleciona(d, x_padrao) );
+                    var opacidade = Math.pow((1-l/10),4);
+                    opacidade = opacidade/(Math.pow(raio_grupo,.01));
+                    return opacidade;
+                })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
+                .attr("stroke-width", "0")
+                .style("visibility", function(d) {
+                    return aparece(d)
+                });
+        }
 
-    //checa se o partido tem a data em questão. se não tiver, tira ele do gráfico
-    function aparece(d) {
-        return partido_data[d.name].indexOf(ano) > -1 ? "visible":"hidden";
-    }
+        //checa se o partido tem a data em questão. se não tiver, tira ele do gráfico
+        function aparece(d) {
+            return partido_data[d.name].indexOf(ano) > -1 ? "visible":"hidden";
+        }
 
 // Defines a sort order so that the smallest dots are drawn on top.
-    function order(a, b) {
-        return radius(b) - radius(a);
-    }
+        function order(a, b) {
+            return radius(b) - radius(a);
+        }
 
 // After the transition finishes, you can mouseover to change the year.
-    function enableInteraction() {
-        var yearScale = d3.scale.linear()
-            .domain([0, (periodo.length-1)])
-            .range([box.x + 10, box.x + box.width - 10])
-            .clamp(true);
+        function enableInteraction() {
+            var yearScale = d3.scale.linear()
+                .domain([0, (periodo.length-1)])
+                .range([box.x + 10, box.x + box.width - 10])
+                .clamp(true);
 
 // Cancel the current transition, if any.
-        svg.transition().duration(3000).ease("linear");
+            svg.transition().duration(3000).ease("linear");
 
-        overlay
-            .on("touchstart",mousedown)
-            .on("touchmove",mousemove)
-            .on("touchend",mouseout)
-            .on("touchleave",mouseout)
-            .on("mouseover", mouseover)
-            .on("mouseout", mouseout)
-            .on("mousedown",mousedown)
-            .on("mouseup",mouseup)
-            .on("mousemove",mousemove);
+            overlay
+                .on("touchstart",mousedown)
+                .on("touchmove",mousemove)
+                .on("touchend",mouseout)
+                .on("touchleave",mouseout)
+                .on("mouseover", mouseover)
+                .on("mouseout", mouseout)
+                .on("mousedown",mousedown)
+                .on("mouseup",mouseup)
+                .on("mousemove",mousemove);
 
-        function mouseover() {
-            label.classed("active", true);
-        }
+            function mouseover() {
+                label.classed("active", true);
+            }
 
-        function mouseout() {
-            dragging=false;
-            label.classed("active", false);
-        }
+            function mouseout() {
+                dragging=false;
+                label.classed("active", false);
+            }
 
-        function mousedown() {
-            dragging = true;
-        }
+            function mousedown() {
+                dragging = true;
+            }
 
-        function mouseup() {
-            dragging = false;
-        }
+            function mouseup() {
+                dragging = false;
+            }
 
-        function mousemove() {
-            if (dragging == true) {
-                displayYear(yearScale.invert(d3.mouse(this)[0]));
+            function mousemove() {
+                if (dragging == true) {
+                    displayYear(yearScale.invert(d3.mouse(this)[0]));
+                }
             }
         }
-    }
 
 // Tweens the entire chart by first tweening the year, and then the data.
 // For the interpolated data, the dots and label are redrawn.
-    function tweenYear() {
-        var year = d3.interpolateNumber(0, periodo.length -1);
-        return function(t) { displayYear(year(t));};
-    }
+        function tweenYear() {
+            var year = d3.interpolateNumber(0, periodo.length -1);
+            return function(t) { displayYear(year(t));};
+        }
 
 // Updates the display to show the specified year.
-    function displayYear(year) {
-        dot.data(interpolateData(year), key).call(position).sort(order);
-        label.text(escreve_data(year));
-    }
+        function displayYear(year) {
+            dot.data(interpolateData(year), key).call(position).sort(order);
+            label.text(escreve_data(year));
+        }
 
-    function escreve_data(year) {
-        if (year == periodo.length) {
-            year = year -1
+        function escreve_data(year) {
+            if (year == periodo.length) {
+                year = year -1
+            }
+            var temp = periodo[Math.floor(year)];
+            var ano = temp.split("-")[0]
+            var mes = traducao_mes[temp.split("-")[1]]
+            //aruma o label do governo
+            if (ano < 2007) {
+                governo.text("Lula 1")
+            } else if (ano < 2011) {
+                governo.text("Lula 2")
+            } else if (ano < 2015) {
+                governo.text("Dilma 1")
+            } else {
+                governo.text("Dilma 2")
+            }
+            return mes + " " + ano
         }
-        var temp = periodo[Math.floor(year)];
-        var ano = temp.split("-")[0]
-        var mes = traducao_mes[temp.split("-")[1]]
-        //aruma o label do governo
-        if (ano < 2007) {
-            governo.text("Lula 1")
-        } else if (ano < 2011) {
-            governo.text("Lula 2")
-        } else if (ano < 2015) {
-            governo.text("Dilma 1")
-        } else {
-            governo.text("Dilma 2")
-        }
-        return mes + " " + ano
-    }
 // Interpolates the dataset for the given (fractional) year.
-    function interpolateData(year) {
-        year = periodo[Math.floor(year)]
-        ano = year
+        function interpolateData(year) {
+            year = periodo[Math.floor(year)]
+            ano = year
 
-        var a = nations.map(function(d) {
-            return {
-                name: d.name,
-                governismo: interpolateValues(d.governismo, year),
-                dispersao: interpolateValues(d.dispersao, year),
-                num_deputados: interpolateValues(d.num_deputados, year),
-                rice: interpolateValues(d.rice, year),
-		        fidelidade_lider: interpolateValues(d.fidelidade_lider, year)
-            };
-        });
-        return(a)
-    }
+            var a = nations.map(function(d) {
+                return {
+                    name: d.name,
+                    governismo: interpolateValues(d.governismo, year),
+                    dispersao: interpolateValues(d.dispersao, year),
+                    num_deputados: interpolateValues(d.num_deputados, year),
+                    rice: interpolateValues(d.rice, year),
+                    fidelidade_lider: interpolateValues(d.fidelidade_lider, year)
+                };
+            });
+            return(a)
+        }
 
 // Finds (and possibly interpolates) the value for the specified year.
-    function interpolateValues(values, year) {
-        if (values.length == 0) {
-            return [] //retorna vazio se não tiver dado para esse período
+        function interpolateValues(values, year) {
+            if (values.length == 0) {
+                return [] //retorna vazio se não tiver dado para esse período
+            }
+            var i = bisect.left(values, year, 0, values.length - 1),
+                a = values[i];
+            return a[1];
         }
-        var i = bisect.left(values, year, 0, values.length - 1),
-            a = values[i];
-        return a[1];
-    }
 
-    function acha_periodo(dados) {
-        var saida = []
-        dados.forEach(function (e) {
-            if (e.name == "PT") {
-                e.governismo.forEach(function (d) {
-                    saida.push(d[0])
+        function acha_periodo(dados) {
+            var saida = []
+            dados.forEach(function (e) {
+                if (e.name == "PT") {
+                    e.governismo.forEach(function (d) {
+                        saida.push(d[0])
+                    })
+                }
+            })
+            return saida
+
+        }
+
+        function acha_partidos(dados) {
+            var saida = []
+            dados.forEach(function (d) {
+                saida.push(d.name)
+            })
+            return saida
+        }
+
+        function acha_data(dados) {
+            var saida = {}
+            dados.forEach(function (d) {
+                if (!(d.name in saida)) {
+                    saida[d.name] = []
+                }
+                d.governismo.forEach(function (e) {
+                    saida[d.name].push(e[0])
                 })
-            }
-        })
-        return saida
-
-    }
-
-    function acha_partidos(dados) {
-        var saida = []
-        dados.forEach(function (d) {
-            saida.push(d.name)
-        })
-        return saida
-    }
-
-    function acha_data(dados) {
-        var saida = {}
-        dados.forEach(function (d) {
-            if (!(d.name in saida)) {
-                saida[d.name] = []
-            }
-            d.governismo.forEach(function (e) {
-                saida[d.name].push(e[0])
             })
-        })
-        return saida
+            return saida
 
-    }
-
-    adiciona_partidos()
-
-    function coloca_botoes() {
-        //botao
-        var botao_x = $( "#eixo_x" )
-            .button({
-                icons: { primary: "ui-icon-carat-1-s"}
-            })
-            .css("height","18px")
-            .css("width","35px")
-            .position({
-                my:"left+10",
-                at:"right",
-                of:".texto_x"
-            })
-            .click(function (){
-                if ($("#caixa_eixo_x").css("display") == "block") {
-                    $("#caixa_eixo_x").css("display","none")
-                } else {
-                    $("#caixa_eixo_x").css("display","block")
-                }
-
-            });
-
-        var caixa_x = $('#caixa_eixo_x')
-            .addClass('ui-corner-all ui-widget')
-            .position({
-                my:"right top-12",
-                at:"right bottom",
-                of:"#eixo_x"
-            });
-
-        var botao_y = $( "#eixo_y" )
-            .button({
-                icons: { primary: "ui-icon-carat-1-e"}
-            })
-            .css({height:"19px",width:"30px"})
-            .position({
-                my:"center bottom-5",
-                at:"left top",
-                of:".texto_y"
-            })
-            .click(function (){
-                if ($("#caixa_eixo_y").css("display") == "block") {
-                    $("#caixa_eixo_y").css("display","none")
-                } else {
-                    $("#caixa_eixo_y").css("display","block")
-                }
-
-            });
-
-        var caixa_y = $('#caixa_eixo_y')
-            .addClass('ui-corner-all ui-widget')
-            .position({
-                my:"right top",
-                at:"right top",
-                of:"#eixo_y"
-            });
-
-
-        for(var key in seletor_x) {
-            caixa_x.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
-            caixa_y.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
         }
 
-        $("li")
-            .on("click",function (){
-                if ($(this).parent().attr("id") == "caixa_eixo_x") {
-                    x_padrao = $(this).attr("id")
-                    adiciona_xaxis()
-                    $("#caixa_eixo_x").css("display","none")
-                    dot.call(position)
-                } else {
-                    y_padrao = $(this).attr("id")
-                    adiciona_yaxis()
-                    $("#caixa_eixo_y").css("display","none")
-                    dot.call(position)
-                }
-            }
-        )
-    }
+        adiciona_partidos()
 
-});
+        function coloca_botoes() {
+            //botao
+            var botao_x = $( "#eixo_x" )
+                .button({
+                    icons: { primary: "ui-icon-carat-1-s"}
+                })
+                .css("height","18px")
+                .css("width","35px")
+                .position({
+                    my:"left+10",
+                    at:"right",
+                    of:".texto_x"
+                })
+                .click(function (){
+                    if ($("#caixa_eixo_x").css("display") == "block") {
+                        $("#caixa_eixo_x").css("display","none")
+                    } else {
+                        $("#caixa_eixo_x").css("display","block")
+                    }
+
+                });
+
+            var caixa_x = $('#caixa_eixo_x')
+                .addClass('ui-corner-all ui-widget')
+                .position({
+                    my:"right top-12",
+                    at:"right bottom",
+                    of:"#eixo_x"
+                });
+
+            var botao_y = $( "#eixo_y" )
+                .button({
+                    icons: { primary: "ui-icon-carat-1-e"}
+                })
+                .css({height:"19px",width:"30px"})
+                .position({
+                    my:"center bottom-5",
+                    at:"left top",
+                    of:".texto_y"
+                })
+                .click(function (){
+                    if ($("#caixa_eixo_y").css("display") == "block") {
+                        $("#caixa_eixo_y").css("display","none")
+                    } else {
+                        $("#caixa_eixo_y").css("display","block")
+                    }
+
+                });
+
+            var caixa_y = $('#caixa_eixo_y')
+                .addClass('ui-corner-all ui-widget')
+                .position({
+                    my:"right top",
+                    at:"right top",
+                    of:"#eixo_y"
+                });
+
+
+            for(var key in seletor_x) {
+                caixa_x.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
+                caixa_y.append("<li id="+key+">"+seletor_x[key][2]+"</li>")
+            }
+
+            $("li")
+                .on("click",function (){
+                    if ($(this).parent().attr("id") == "caixa_eixo_x") {
+                        x_padrao = $(this).attr("id")
+                        adiciona_xaxis()
+                        $("#caixa_eixo_x").css("display","none")
+                        dot.call(position)
+                    } else {
+                        y_padrao = $(this).attr("id")
+                        adiciona_yaxis()
+                        $("#caixa_eixo_y").css("display","none")
+                        dot.call(position)
+                    }
+                }
+            )
+        }
+
+    });
+}
+
 
 //função para o menu de partidos
 function toggleSelect(el) {
@@ -657,6 +716,9 @@ function coloca_partido(sigla) {
 function tira_partido(sigla) {
     $("circle[partido='"+sigla.trim()+"']").hide()
 }
+
+//roda o script
+baixa_dados()
 
 //coloca hover na tooltip da nota técnica
 tecnica = d3.select("#tecnica")
