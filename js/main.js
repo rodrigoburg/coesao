@@ -724,7 +724,9 @@ function coloca_rodapes() {
     $("#rodapes").find("li").each(function (a,e) {
         //as criancas de cada div são o "p" com o nome do índice e o "span" que é a tooltip
         var criancas = $(e).children()
+
         var tecnica = d3.select(criancas[1])
+
 
         d3.select(criancas[0])
             .on("mouseover", function (d) {
