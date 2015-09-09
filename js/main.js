@@ -75,13 +75,13 @@ function lider(d) { return d.fidelidade_lider; }
 
 
 var seletor_x = {
-    "dispersao": [ 0.0, 6.0, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
+    "dispersao": [ 0.0, 7, "índice de dispersão",  function(d) { return dispScale( x(d) )  ; }],
     "rice": [ 1.0, 0.3, "índice de rice", function(d) { return rice(d); } ],
     "fidelidade_lider": [ 80, 100, "fidelidade ao líder", function(d) { return lider(d);} ],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
-    "num_deputados": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ],
-    "discricionario":[0,7500, "gasto discricionario", function (d) { return (d.discricionario == "-") ? [] : d.discricionario/1000000 }],
-    "obrigatorio":[0,45000, "gasto obrigatorio", function (d) { return (d.obrigatorio == "-") ? [] : d.obrigatorio/1000000 }]
+    "num_deputados": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
+    //,"discricionario":[0,7500, "gasto discricionario", function (d) { return (d.discricionario == "-") ? [] : d.discricionario/1000000 }],
+    //"obrigatorio":[0,45000, "gasto obrigatorio", function (d) { return (d.obrigatorio == "-") ? [] : d.obrigatorio/1000000 }]
 }
 
 // Cria escala para dispersão
@@ -199,7 +199,6 @@ var paleta = {
 var baixa_dados = function () {
     $.getJSON(url_ministerio, function (d) {
         var dados_ministerios = le_planilha(d)
-        console.log(dados_ministerios)
         desenha_grafico(dados_ministerios)
     })
 }
@@ -339,7 +338,6 @@ var desenha_grafico = function (dados_ministerios) {
         partidos_selecionados = partidos
         nations = junta_dados(nations, dados_ministerios)
         periodo = acha_periodo(nations)
-        console.log(nations)
         partido_data = acha_data(nations)
 
         //faz um multiplicador que transformará o index de cada partido em um número entre 0 e o total de cores da paleta)
@@ -531,7 +529,6 @@ var desenha_grafico = function (dados_ministerios) {
                 }
                 return saida
             });
-            console.log(a,year)
             return(a)
         }
 
