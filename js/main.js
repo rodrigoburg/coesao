@@ -7,15 +7,13 @@ Quando criar o seletor, lembrar de setar valor_seletor (indica o índice - dispe
 
 e controle_seletor ( indica se o axis já foi construído)
 
-
-
 */
 
 
 /* Preciso destas */
 var x_padrao = "dispersao";
 var y_padrao = "governismo";
-var raio_padrao = "num_parlamentares";
+var raio_padrao = "num_deputados";
 var transparencia_padrao = "dispersão";
 var eixos_selecionados = [x_padrao,y_padrao]
 
@@ -81,10 +79,19 @@ var seletor_x = {
     "rice": [ 1.0, 0.3, "índice de rice", function(d) { return rice(d); } ],
     "fidelidade_lider": [ 80, 100, "fidelidade ao líder", function(d) { return lider(d);} ],
     "governismo":[ 20, 100, "índice de governismo", function(d) { return y(d); } ],
-    "num_parlamentares": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ]
+    "num_deputados": [ 0, 100, "número de parlamentares", function(d) { return radius(d); } ],
+    "discricionario":[0,7500, "gasto discricionario", function (d) { return (d.discricionario == "-") ? [] : d.discricionario/1000000 }],
+    "obrigatorio":[0,45000, "gasto obrigatorio", function (d) { return (d.obrigatorio == "-") ? [] : d.obrigatorio/1000000 }]
 }
 
+// Cria escala para dispersão
+var dispScale = d3.scale.linear()
+    .domain([0,25])
+    .range([0,10]);
 
+var escala_transparencia = d3.scale.linear()
+    .domain([seletor_x[x_padrao][0],seletor_x[x_padrao][1]])
+    .range([0,10]);
 
 function seleciona(d, padrao) {
 	return seletor_x[padrao][3](d);        
@@ -101,10 +108,6 @@ var xScale = d3.scale.linear().domain([seletor_x[x_padrao][0], seletor_x[x_padra
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
 
-// Cria escala para dispersão
-var dispScale = d3.scale.linear()
-	.domain([0,25])
-	.range([0,10]);
 
 
 // The x & y axes.
@@ -153,8 +156,6 @@ var traducao_mes = {
     "12":"dez"
 }
 
-
-
 var paleta = {
     PTC:'#A11217',
     PT:'#BE003E',
@@ -194,11 +195,11 @@ var paleta = {
     PPB:'#634600'
 }
 
-
 //função para baixar os dados dos ministérios
 var baixa_dados = function () {
     $.getJSON(url_ministerio, function (d) {
         var dados_ministerios = le_planilha(d)
+        console.log(dados_ministerios)
         desenha_grafico(dados_ministerios)
     })
 }
@@ -235,9 +236,32 @@ var le_planilha = function(d) {
     return saida
 }
 
+var conserta_mes = function (mes) {
+    return ("0" + mes).slice(-2);
+}
 
 //função que junta os dados do json com os dados do google docs sobre os ministérios
 var junta_dados = function (dados1,dados2) {
+    var obrigatorio = {}
+    var discricionario = []
+    dados2.forEach(function (d){
+        if (partidos.indexOf(d.sigla) > -1) {
+            if (!(d.sigla in obrigatorio)) {
+                obrigatorio[d.sigla] = []
+                discricionario[d.sigla] = []
+            }
+            obrigatorio[d.sigla].push([d.ano + "-"+conserta_mes(d.mes)+"-01", d.obrigatorio])
+            discricionario[d.sigla].push([d.ano + "-"+conserta_mes(d.mes)+"-01", d.discricionario])
+        }
+    })
+
+    dados1.forEach(function (d) {
+        if (d.name in obrigatorio) {
+            d.obrigatorio = obrigatorio[d.name]
+            d.discricionario = discricionario[d.name]
+        }
+    })
+
     return dados1
 
 }
@@ -311,10 +335,11 @@ var desenha_grafico = function (dados_ministerios) {
 
         coloca_botoes()
 
-        periodo = acha_periodo(nations)
         partidos = acha_partidos(nations)
         partidos_selecionados = partidos
         nations = junta_dados(nations, dados_ministerios)
+        periodo = acha_periodo(nations)
+        console.log(nations)
         partido_data = acha_data(nations)
 
         //faz um multiplicador que transformará o index de cada partido em um número entre 0 e o total de cores da paleta)
@@ -394,8 +419,9 @@ var desenha_grafico = function (dados_ministerios) {
                 .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(seleciona(d, raio_padrao)/raioScale(raio_grupo))); })
                 .attr("fill-opacity", function(d) {
                     raio_grupo = correcao_grupos();
-                    var l = dispScale(seleciona(d, x_padrao) );
-                    var opacidade = Math.pow((1-l/10),4);
+                    //var l = escala_transparencia(seleciona(d, x_padrao) );
+                    //var opacidade = Math.pow((1-l/10),1.1);
+                    var opacidade = 0.5
                     opacidade = opacidade/(Math.pow(raio_grupo,.01));
                     return opacidade;
                 })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
@@ -498,23 +524,23 @@ var desenha_grafico = function (dados_ministerios) {
             ano = year
 
             var a = nations.map(function(d) {
-                return {
-                    name: d.name,
-                    governismo: interpolateValues(d.governismo, year),
-                    dispersao: interpolateValues(d.dispersao, year),
-                    num_deputados: interpolateValues(d.num_deputados, year),
-                    rice: interpolateValues(d.rice, year),
-                    fidelidade_lider: interpolateValues(d.fidelidade_lider, year)
-                };
+                var saida = {}
+                saida["name"] = d.name
+                for (var item in seletor_x) {
+                    saida[item] = interpolateValues(d[item],year)
+                }
+                return saida
             });
+            console.log(a,year)
             return(a)
         }
 
 // Finds (and possibly interpolates) the value for the specified year.
         function interpolateValues(values, year) {
-            if (values.length == 0) {
+            if (values == undefined || values.length == 0) {
                 return [] //retorna vazio se não tiver dado para esse período
             }
+
             var i = bisect.left(values, year, 0, values.length - 1),
                 a = values[i];
             return a[1];
@@ -724,7 +750,9 @@ function coloca_rodapes() {
     $("#rodapes").find("li").each(function (a,e) {
         //as criancas de cada div são o "p" com o nome do índice e o "span" que é a tooltip
         var criancas = $(e).children()
+
         var tecnica = d3.select(criancas[1])
+
 
         d3.select(criancas[0])
             .on("mouseover", function (d) {
