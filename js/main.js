@@ -8,8 +8,6 @@ Quando criar o seletor, lembrar de setar valor_seletor (indica o índice - dispe
 e controle_seletor ( indica se o axis já foi construído)
 
 */
-
-
 /* Preciso destas */
 var x_padrao = "dispersao";
 var y_padrao = "governismo";
@@ -18,7 +16,6 @@ var transparencia_padrao = "dispersão";
 var eixos_selecionados = [x_padrao,y_padrao]
 
 
-var url = "http://estadaodados.com/basometro/dados/variancia_camara.json"
 url = "data/variancia_camara.json"
 var url_ministerio = "https://spreadsheets.google.com/feeds/cells/1cR-OkyIUsU3vTw2JiCc9JbyTWvBl2dlzvtSfeTczlx0/3/public/values?alt=json"
 
@@ -199,7 +196,7 @@ var paleta = {
 var baixa_dados = function () {
     $.getJSON(url_ministerio, function (d) {
         var dados_ministerios = le_planilha(d)
-        desenha_grafico(dados_ministerios)
+        desenha_grafico()
     })
 }
 
@@ -265,7 +262,8 @@ var junta_dados = function (dados1,dados2) {
 
 }
 // Load the data.
-var desenha_grafico = function (dados_ministerios) {
+var desenha_grafico = function () {
+    console.log(url)
     d3.json(url, function(nations) {
 
         // Add the x-axis.
@@ -336,7 +334,7 @@ var desenha_grafico = function (dados_ministerios) {
 
         partidos = acha_partidos(nations)
         partidos_selecionados = partidos
-        nations = junta_dados(nations, dados_ministerios)
+        //nations = junta_dados(nations, dados_ministerios)
         periodo = acha_periodo(nations)
         partido_data = acha_data(nations)
 
@@ -511,8 +509,10 @@ var desenha_grafico = function (dados_ministerios) {
                 governo.text("Lula 2")
             } else if (ano < 2015) {
                 governo.text("Dilma 1")
-            } else {
+            } else if (ano < 2017 && ["jan","fev","mar","abr","mai"].indexOf(mes) > 0) {
                 governo.text("Dilma 2")
+            } else {
+                governo.text("Temer 1")
             }
             return mes + " " + ano
         }
@@ -546,8 +546,9 @@ var desenha_grafico = function (dados_ministerios) {
         function acha_periodo(dados) {
             var saida = []
             dados.forEach(function (e) {
-                if (e.name == "PT") {
+                if (e.name == "PT") {                    
                     e.governismo.forEach(function (d) {
+                        console.log(d)
                         saida.push(d[0])
                     })
                 }
