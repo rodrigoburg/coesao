@@ -349,8 +349,8 @@ var desenha_grafico = function () {
 
 // A bisector since many nation's data is sparsely-defined.
         var bisect = d3.bisector(function(d) { return d[0]; });
-        var tres = [ interpolateData(0), interpolateData(0) , interpolateData(0)];
-        max_circulos = interpolateData(0).length;
+        var tres = [ interpolateData(0) ];
+        max_circulos = 1;
 // Add a dot per nation. Initialize the data at 0 (primeiro mês), and set the colors.
         var grupo = svg.append("g")
             .attr("class", "grupos")
@@ -366,6 +366,8 @@ var desenha_grafico = function () {
             .attr("class", "dot")
             .style("fill", function(d, i) { return paleta[d.name]; })
             .style("stroke", function(d) { return paleta[d.name]; })
+            .style("stroke-opacity",0.7)
+            .style("stroke-width",3)
             .call(position)
             .sort(order)
             .on("mouseover", function (d) {
@@ -413,14 +415,14 @@ var desenha_grafico = function () {
                     return(xScale(seleciona(d, x_padrao))); } )
                 .attr("cy", function(d) { return yScale(seleciona(d, y_padrao)); })
                 .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(seleciona(d, raio_padrao)/raioScale(raio_grupo))); })
-                .attr("fill-opacity", function(d) {
+                .attr("fill-opacity", 0.6) /*function(d) {
                     raio_grupo = correcao_grupos();
                     //var l = escala_transparencia(seleciona(d, x_padrao) );
                     //var opacidade = Math.pow((1-l/10),1.1);
                     var opacidade = 0.5
                     opacidade = opacidade/(Math.pow(raio_grupo,.01));
                     return opacidade;
-                })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)
+                })// Repare na função da transparência. Ela obtem a opacidade pelo valor de x e divide pela raiz quadrada do raio_grupo (1, 2 ou 4)*/
                 .attr("stroke-width", "0")
                 .style("visibility", function(d) {
                     return aparece(d)
