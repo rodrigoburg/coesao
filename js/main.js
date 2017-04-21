@@ -25,41 +25,9 @@ var div = d3.select("body").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
 
-// função para poder executar uma correção para cada grupo de círculos
-// Retorna um valor para cada grupo. 1, para o grupo 1; 2, para o grupo 2; 4, para o grupo 3.
-// A diferença 
-var correcao_grupos = function() {
-    if ( controle_circulos >= 2*max_circulos ) {
-        if ( controle_circulos == 3*max_circulos) {
-            controle_circulos = 1;
-            return 1;
-        }
-        controle_circulos += 1;
-        return 5;
-    }
-    else if ( controle_circulos >= max_circulos ) {
-        controle_circulos += 1;
-        return 2;
-    }
-    else {
-        controle_circulos += 1;
-        return 1;
-    }
-}
-
-var controle_circulos = 0; // ordenação de círculos para a função
-var max_circulos; // número máximo de círculos 
-var raio_grupo;
 var ano;
 var partido_data = {} //variável que mostra quais datas existem para cada partido
 var dragging = false
-
-// Escala para raio 
-
-var raioScale = d3.scale.linear()
-	.domain([1,2, 5])
-	.range([5,2, 1]);
-
 
 
 // Various accessors that specify the four dimensions of data to visualize.
@@ -93,8 +61,6 @@ var escala_transparencia = d3.scale.linear()
 function seleciona(d, padrao) {
 	return seletor_x[padrao][3](d);        
 }
-
-
 // Chart dimensions.
 var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
     width = 900 - margin.right,
@@ -104,8 +70,6 @@ var margin = {top: 70, right: 19.5, bottom: 19.5, left: 39.5},
 var xScale = d3.scale.linear().domain([seletor_x[x_padrao][0], seletor_x[x_padrao][1]]).range([50, width]),
     yScale = d3.scale.linear().domain([20, 100]).range([height, 0]),
     radiusScale = d3.scale.sqrt().domain([1, 100]).range([0, 70]);
-
-
 
 // The x & y axes.
 var xAxis = d3.svg.axis().orient("bottom").scale(xScale),
@@ -263,7 +227,6 @@ var junta_dados = function (dados1,dados2) {
 }
 // Load the data.
 var desenha_grafico = function () {
-    console.log(url)
     d3.json(url, function(nations) {
 
         // Add the x-axis.
@@ -350,7 +313,6 @@ var desenha_grafico = function () {
 // A bisector since many nation's data is sparsely-defined.
         var bisect = d3.bisector(function(d) { return d[0]; });
         var tres = [ interpolateData(0) ];
-        max_circulos = 1;
 // Add a dot per nation. Initialize the data at 0 (primeiro mês), and set the colors.
         var grupo = svg.append("g")
             .attr("class", "grupos")
@@ -414,7 +376,7 @@ var desenha_grafico = function () {
                 .attr("cx", function(d) {
                     return(xScale(seleciona(d, x_padrao))); } )
                 .attr("cy", function(d) { return yScale(seleciona(d, y_padrao)); })
-                .attr("r", function(d) { raio_grupo = correcao_grupos(); return Math.abs(radiusScale(seleciona(d, raio_padrao)/raioScale(raio_grupo))); })
+                .attr("r", function(d) { return Math.abs(radiusScale(seleciona(d, raio_padrao))); })
                 .attr("fill-opacity", 0.6) /*function(d) {
                     raio_grupo = correcao_grupos();
                     //var l = escala_transparencia(seleciona(d, x_padrao) );
